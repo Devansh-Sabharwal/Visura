@@ -1,0 +1,9 @@
+.env
+media/
+rendered/
+venv
+__pycache__/
+
+# Alembic cache
+alembic/versions/*.pyc
+alembic/__pycache__/
