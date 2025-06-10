@@ -17,6 +17,11 @@ SYSTEM_PROMPT = """{
    "Use .move_to(ORIGIN) for centering objects",
    "Never overlap text or axes"
    ],
+    "colors": {
+      "allowed": ["WHITE", "BLUE", "RED", "GREEN", "YELLOW", "ORANGE", "PINK", "PURPLE", "GRAY"],
+      "disallowed": ["Hex codes", "RGB", "Color()"]
+    },
+   "runtime":"10-30 seconds",
   "objectives": [
     "Generate error-free Manim CE v0.19.0 code that runs without external dependencies",
     "Use only built-in Manim Mobjects and methods that exist in v0.19.0",
@@ -36,6 +41,7 @@ SYSTEM_PROMPT = """{
       "Maintain buff ≥ 0.5 to avoid overlap"
     ]
   },
+  
   "axes_rules": {
     "must_include": [
       "x_range=[min, max]",
@@ -49,6 +55,45 @@ SYSTEM_PROMPT = """{
       "Custom tick formatting"
     ]
   },
+  "prohibited_classes": [
+        "Polyline",  # Doesn't exist in Manim
+        "Curve",  # Doesn't exist (use ParametricFunction instead)
+        "FreehandDrawing"  # Doesn't exist
+      ]
+    },
+    "line_creation": {
+      "correct_methods": [
+        "Line(start, end)",
+        "VMobject().set_points_as_corners([points])",
+        "Polygon(*points) for closed shapes"
+      ],
+      "incorrect_examples": [
+        "Polyline()  # Invalid class",
+        "Curve()  # Invalid class"
+      ]
+
+  "text_encoding": {
+      "allowed_characters": "ONLY ASCII characters (no Unicode/Greek symbols)",
+      "prohibited": [
+        "Greek letters (λ, π, θ, etc.)",
+        "Mathematical symbols (≠, ≥, ∫, etc.)",
+        "Non-ASCII punctuation (“, ”, –, etc.)"
+      ],
+      "substitution_rules": [
+        "Use 'lambda' instead of 'λ'",
+        "Use 'pi' instead of 'π'",
+        "Use 'theta' instead of 'θ'",
+        "Replace fancy quotes with \" or '"
+      ]
+    },
+    "text_rendering": {
+      "allowed_methods": ["Text()"],
+      "required_parameters": ["font_size", "color"],
+      "examples": {
+        "correct": "Text('lambda', font_size=24, color=BLUE)",
+        "incorrect": "Text('λ', font_size=24)"  # Unicode forbidden
+      
+    },
   "graph_rules": {
     "allowed_methods": [
       "axes.plot()", 
@@ -92,7 +137,7 @@ SYSTEM_PROMPT = """{
       "4. Use wait(0.5–1) between logical groups",
       "5. Final wait(1)"
     ],
-    "runtime_range": "7 to 15 seconds total",
+   
     "rate_func": "linear for motion; no easing functions"
   },
   "error_prevention": {
@@ -132,10 +177,7 @@ SYSTEM_PROMPT = """{
       "use_edges": true,
       "avoid_center_clumping": true
     },
-    "colors": {
-      "allowed": ["WHITE", "BLUE", "RED", "GREEN", "YELLOW", "ORANGE", "PINK", "PURPLE", "GRAY"],
-      "disallowed": ["Hex codes", "RGB", "Color()"]
-    },
+   
     "scaling": {
       "uniform": "use .scale() with range 0.5–2.0",
       "non_uniform": "use .stretch() only if needed"
@@ -151,7 +193,13 @@ SYSTEM_PROMPT = """{
       "Start with imports immediately"
     ],
     "prohibited": ["```", "TODO", "Placeholder code"]
+    "numpy_interaction": [
+        "Never call get_y()/get_x() on arrays",
+        "Use mobject.get_center() instead of direct array access",
+        "When using numpy, explicitly convert to mobjects first"
+      ]
     "CRITICAL":[
+    "PAY ATTENTION TO COLORS I TOLD YOU"
     "NEVER call the method inside `ApplyMethod`. Only pass the method reference and arguments separately. For example, use `ApplyMethod(mob.shift, UP)` instead of `ApplyMethod(mob.shift(UP))`,
     "NEVER use `streaming_profile` with other transformation parameters in a single Cloudinary upload call. If `streaming_profile` is used, it must be the **only** directive inside the `transformation`,"
 
@@ -170,7 +218,7 @@ def manim_script_from_prompt(history: list[dict[str, str]]) -> str:
         resp = client.models.generate_content(
             model="gemini-2.5-flash-preview-05-20",
             config=types.GenerateContentConfig(
-                temperature=0.3,
+                temperature=0.2,
                 max_output_tokens=20_000,
                 system_instruction=SYSTEM_PROMPT
             ),

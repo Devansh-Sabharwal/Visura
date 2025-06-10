@@ -13,4 +13,4 @@ def find_scene_class(source: str) -> Optional[str]:
 def video_output_path(script_name: Path, scene_class: str) -> Path:
     # Manim puts videos under media/videos/<script_name_without_py>/<quality>/<Scene>.mp4
     folder = script_name.stem
-    return Path("media") / "videos" / folder / "1080p60" / f"{scene_class}.mp4"
+    return Path("media") / "videos" / folder / "480p15" / f"{scene_class}.mp4"
