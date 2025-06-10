@@ -144,6 +144,7 @@ SYSTEM_PROMPT = """{
   "output_format": {
     "rules": [
       "Only raw Python code",
+      "DO NOT include any explanation or plain text outside of Python code.",
       "No markdown",
       "No explanations or comments",
       "Proper indentation with 4 spaces",
