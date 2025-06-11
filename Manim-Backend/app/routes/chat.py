@@ -66,6 +66,7 @@ async def chat(body:PromptReq,req:Request,session:Session=Depends(get_session)):
         )
         
     except SQLAlchemyError as e:
+        print(e)
         session.rollback()
         raise HTTPException(
             status_code=500, 

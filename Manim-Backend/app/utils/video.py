@@ -56,34 +56,34 @@ async def generate_video(context, chatId, session):
         print("error raised at line 55 video.py", e)
         raise RuntimeError("Error while generating video") from e
 
-    # finally:
-    #     # Clean up the .py script
-    #     if py_file and py_file.exists():
-    #         py_file.unlink()
+    finally:
+        # Clean up the .py script
+        if py_file and py_file.exists():
+            py_file.unlink()
         
-    #     # Clean up the rendered video file
-    #     if vid_path and vid_path.exists():
-    #         try:
-    #             vid_path.unlink()
-    #         except Exception as cleanup_err:
-    #             print("Failed to delete video file:", cleanup_err)
+        # Clean up the rendered video file
+        if vid_path and vid_path.exists():
+            try:
+                vid_path.unlink()
+            except Exception as cleanup_err:
+                print("Failed to delete video file:", cleanup_err)
 
-    #     cache = BASE_DIR/ "rendered" /"__pycache__" / f"scene_{file_id}.cpython-313.pyc"
-    #     try:
-    #         cache.unlink
-    #     except Exception as cleanup_err:
-    #             print("Failed to delete cache file:", cleanup_err)
+        cache = BASE_DIR/ "rendered" /"__pycache__" / f"scene_{file_id}.cpython-313.pyc"
+        try:
+            cache.unlink()
+        except Exception as cleanup_err:
+                print("Failed to delete cache file:", cleanup_err)
         
-    #     media_dir = BASE_DIR / "media" / "videos" / f"scene_{file_id}"
-    #     if media_dir.exists() and media_dir.is_dir():
-    #         for file in media_dir.iterdir():
-    #             try:
-    #                 if file.is_file():
-    #                     file.unlink()
-    #                 elif file.is_dir():
-    #                     rmtree(file)
-    #             except Exception as e:
-    #                 print(f"Failed to delete {file.name} in media dir: {e}")
+        media_dir = BASE_DIR / "media" / "videos" / f"scene_{file_id}"
+        if media_dir.exists() and media_dir.is_dir():
+            for file in media_dir.iterdir():
+                try:
+                    if file.is_file():
+                        file.unlink()
+                    elif file.is_dir():
+                        rmtree(file)
+                except Exception as e:
+                    print(f"Failed to delete {file.name} in media dir: {e}")
         
 
 def render_with_manim(py_file: Path, scene_class: str) -> Path:
