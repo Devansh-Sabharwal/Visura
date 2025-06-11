@@ -138,7 +138,7 @@ def manim_script_from_prompt(history: list[dict[str, str]]) -> str:
         resp = client.models.generate_content(
             model="gemini-2.5-flash-preview-05-20",
             config=types.GenerateContentConfig(
-                temperature=0.2,
+                temperature=0.1,
                 max_output_tokens=20_000,
                 system_instruction=SYSTEM_PROMPT
             ),
