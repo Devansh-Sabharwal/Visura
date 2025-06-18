@@ -1,9 +1,24 @@
-from app.routes import auth, chat
+from app.routes import auth, chat,video
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 app = FastAPI(title="Manim")
 from app.middleware.middleware import auth_middleware 
 
+origins = [
+    "http://localhost:3000",
+    "https://your-frontend-domain.com", 
+]
+
 app.middleware("http")(auth_middleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"],
+)
+
 app.include_router(auth.router) 
 app.include_router(chat.router)  
+app.include_router(video.router)
 

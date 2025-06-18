@@ -86,7 +86,7 @@ from app.utils.video import generate_video_from_stream
 from app.db.db import SessionLocal
 import asyncio
 import uuid
-
+import time
 @router.post("/prompt-stream")
 async def stream_chat(body: PromptReq, req: Request, background_tasks: BackgroundTasks,session: Session = Depends(get_session)):
     user_id = req.state.user_id
@@ -99,7 +99,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             buffer = ""
             explanation_text=""
             code_text=""
-            current_type = "explanation"
+            current_type = "none"
             chat = session.exec(select(Chat).where(Chat.id == chat_id)).first()
             if not chat:
                 chat = Chat(id=chat_id, userId=user_id, title=f"{chat_id[:6]}")
@@ -113,59 +113,163 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             
             context = getContext(session, chat_id, 3)
             contents = build_content_list(context)
-
-            # Stream Gemini response
-            resp = client.models.generate_content_stream(
-                model="gemini-2.5-flash-preview-05-20",
-                config=types.GenerateContentConfig(
-                    temperature=0.1,
-                    max_output_tokens=20000,
-                    system_instruction=SYSTEM_PROMPT
-                ),
-                contents=contents
-            )
-            for chunk in resp:
-                if not chunk.text:
-                    continue
-                print(chunk)
-                buffer += chunk.text
-
-                while True:
-                    if "<<<CODE>>>" in buffer:
-                        before, buffer = buffer.split("<<<CODE>>>", 1)
-                        if(current_type=="explanation" and before.strip()): 
-                            explanation_text += before.strip()
-                        yield f"data: {json.dumps({'type': current_type, 'text': before.strip()})}\n\n"
-                        current_type = "code"
-                    elif "<<<EXPLANATION>>>" in buffer:
-                        before, buffer = buffer.split("<<<EXPLANATION>>>", 1)
-                        if(current_type=="explanation"): 
-                            explanation_text += before.strip()
-                        yield f"data: {json.dumps({'type': current_type, 'text': before.strip()})}\n\n"
-                        current_type = "explanation"
-                    else:
-                        break
-
             
-            if buffer.strip():
-                if(current_type=="explanation"): 
-                    explanation_text += buffer.strip()
-                else:
-                    code_text+=buffer.strip()
-                yield f"data: {json.dumps({'type': current_type, 'text': buffer.strip()})}\n\n"
-
+            CODE_DELIMITER = "<<<CODE>>>"
+            EXPLANATION_DELIMITER = "<<<EXPLANATION>>>"
+            
+            # Keep track of partial delimiters
+            max_delimiter_len = max(len(CODE_DELIMITER), len(EXPLANATION_DELIMITER))
+            
+            yield f"data: {json.dumps({'type': 'debug', 'text': 'starting stream...'})}\n\n"
+            await asyncio.sleep(0.01)
+            print("response sent")
+            
+            try:
+                resp = client.models.generate_content_stream(
+                    model="gemini-2.5-flash-preview-05-20",
+                    config=types.GenerateContentConfig(
+                        temperature=0.1,
+                        max_output_tokens=20000,
+                        system_instruction=SYSTEM_PROMPT
+                    ),
+                    contents=contents
+                )
+                
+                for chunk in resp:
+                    if not chunk.text:
+                        continue
+                    
+                    # Add new chunk to buffer
+                    buffer += chunk.text
+                    
+                    # Process and stream immediately, but keep potential delimiter parts
+                    while len(buffer) > max_delimiter_len:
+                        # Look for complete delimiters
+                        code_pos = buffer.find(CODE_DELIMITER)
+                        explanation_pos = buffer.find(EXPLANATION_DELIMITER)
+                        
+                        # Find the earliest delimiter
+                        earliest_pos = -1
+                        next_type = None
+                        
+                        if code_pos != -1 and explanation_pos != -1:
+                            if code_pos < explanation_pos:
+                                earliest_pos = code_pos
+                                next_type = "code"
+                            else:
+                                earliest_pos = explanation_pos
+                                next_type = "explanation"
+                        elif code_pos != -1:
+                            earliest_pos = code_pos
+                            next_type = "code"
+                        elif explanation_pos != -1:
+                            earliest_pos = explanation_pos
+                            next_type = "explanation"
+                        
+                        if earliest_pos != -1:
+                            # Found a delimiter - process everything before it
+                            before_delimiter = buffer[:earliest_pos]
+                            
+                            if before_delimiter:
+                                # Stream the content immediately
+                                if current_type == "explanation":
+                                    explanation_text += before_delimiter
+                                else:
+                                    code_text += before_delimiter
+                                
+                                yield f"data: {json.dumps({'type': current_type, 'text': before_delimiter})}\n\n"
+                            
+                            # Switch type and remove processed content
+                            current_type = next_type
+                            delimiter_len = len(CODE_DELIMITER) if next_type == "code" else len(EXPLANATION_DELIMITER)
+                            buffer = buffer[earliest_pos + delimiter_len:]
+                        else:
+                            # No delimiter found - stream all but keep potential delimiter part
+                            # Keep the last max_delimiter_len characters in case they're part of a split delimiter
+                            safe_to_stream = buffer[:-max_delimiter_len]
+                            
+                            if safe_to_stream:
+                                if current_type == "explanation":
+                                    explanation_text += safe_to_stream
+                                else:
+                                    code_text += safe_to_stream
+                                
+                                yield f"data: {json.dumps({'type': current_type, 'text': safe_to_stream})}\n\n"
+                                buffer = buffer[-max_delimiter_len:]  # Keep potential delimiter part
+                            
+                            break
+                
+                # Process any remaining buffer content (final chunk)
+                if buffer:
+                    # Check one more time for delimiters in the final buffer
+                    code_pos = buffer.find(CODE_DELIMITER)
+                    explanation_pos = buffer.find(EXPLANATION_DELIMITER)
+                    
+                    # Process any remaining delimiters
+                    while code_pos != -1 or explanation_pos != -1:
+                        earliest_pos = -1
+                        next_type = None
+                        
+                        if code_pos != -1 and explanation_pos != -1:
+                            if code_pos < explanation_pos:
+                                earliest_pos = code_pos
+                                next_type = "code"
+                            else:
+                                earliest_pos = explanation_pos
+                                next_type = "explanation"
+                        elif code_pos != -1:
+                            earliest_pos = code_pos
+                            next_type = "code"
+                        elif explanation_pos != -1:
+                            earliest_pos = explanation_pos
+                            next_type = "explanation"
+                        
+                        # Process content before delimiter
+                        before_delimiter = buffer[:earliest_pos]
+                        if before_delimiter:
+                            if current_type == "explanation":
+                                explanation_text += before_delimiter
+                            else:
+                                code_text += before_delimiter
+                            
+                            yield f"data: {json.dumps({'type': current_type, 'text': before_delimiter})}\n\n"
+                        
+                        # Switch type and continue
+                        current_type = next_type
+                        delimiter_len = len(CODE_DELIMITER) if next_type == "code" else len(EXPLANATION_DELIMITER)
+                        buffer = buffer[earliest_pos + delimiter_len:]
+                        
+                        
+                        code_pos = buffer.find(CODE_DELIMITER)
+                        explanation_pos = buffer.find(EXPLANATION_DELIMITER)
+                    
+                    
+                    if buffer:
+                        if current_type == "explanation":
+                            explanation_text += buffer
+                        else:
+                            code_text += buffer
+                        
+                        yield f"data: {json.dumps({'type': current_type, 'text': buffer})}\n\n"
+            
+            except Exception as e:
+                print(f"Error processing stream: {e}")
+                yield f"data: {json.dumps({'type': 'error', 'text': str(e)})}\n\n"
+            
+            
             yield f"data: {json.dumps({'type': 'done', 'request_id': request_id})}\n\n"
 
             data = {
-                "explanation":explanation_text,
-                "code":code_text
+                "explanation": explanation_text,
+                "code": code_text
             }
             content = json.dumps(data)
+                        
             new_message = Message(role="model", content=content,chatId=chat_id)
             create_message(session, new_message)
             session.commit()
 
-            background_tasks.add_task(generate_video_background, code_text, chat_id,request_id)
+            # background_tasks.add_task(generate_video_background, code_text, chat_id,request_id)
 
         except Exception as e:
             session.rollback()

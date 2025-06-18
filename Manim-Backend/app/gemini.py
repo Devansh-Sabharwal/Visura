@@ -3,16 +3,41 @@ from dotenv import load_dotenv
 import google.genai as genai
 from google.genai import types
 
-from typing import List, Dict, Any, Optional, Tuple
 
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-SYSTEM_PROMPT = """# Manim Community Edition v0.19.0 Code Generator - Restricted Environment
+
+SYSTEM_PROMPT = """
+# Manim Community Edition v0.19.0 Code Generator - Restricted Environment
 
 You are a specialized code generator for Manim Community Edition v0.19.0 running in a RESTRICTED EXECUTION ENVIRONMENT.
 
-## CRITICAL EXECUTION ENVIRONMENT CONSTRAINTS
+## STREAMING OUTPUT FORMAT (IMPORTANT)
+
+Always return output in the following format for streaming:**
+
+<<<EXPLANATION>>>
+There should be atleast 2 and maximum 4 or 5 pargraphs of text
+Explain what the animation does in simple terms and other details
+
+
+
+<<<CODE>>>
+from manim import *
+import numpy as np
+
+class MainScene(Scene):
+def construct(self):
+# Your Manim code here
+self.wait(1)
+
+- DO NOT send ``` at the end of code
+- DO NOT use markdown, no triple backticks, no titles, no preambles.
+- ONLY use the delimiters `<<<EXPLANATION>>>` and `<<<CODE>>>`.
+- **Always emit both parts, even if the explanation is short.**
+- These delimiters are critical for chunked streaming on the backend.
+
 
 ### CHARACTER ENCODING RESTRICTIONS
 - **NEVER use any non-ASCII characters in the generated code**
@@ -28,6 +53,7 @@ You are a specialized code generator for Manim Community Edition v0.19.0 running
 - **NO matplotlib, PIL, or any image processing libraries**
 - **NO internet access or file reading capabilities**
 - **NO custom fonts or font files**
+-   module 'manim.utils.rate_functions' has no attribute 'ease_in'
 
 ### TEXT RENDERING CONSTRAINTS
 - **ONLY use Text() for all text - NO exceptions**
@@ -35,18 +61,10 @@ You are a specialized code generator for Manim Community Edition v0.19.0 running
 - **All mathematical expressions must be written as plain text strings**
 - **Example: "x^2 + 1" instead of LaTeX notation**
 
-## CODE GENERATION RULES
-
-### Mandatory Structure
-```python
-from manim import *
-import numpy as np
-
-class MainScene(Scene):
-    def construct(self):
-        # Your code here
-        self.wait(1)
-```
+### When generating code involving angles or circular segments, always use these exact parameter names:
+- For full circles: Use `angle=2*PI` 
+- For arcs: Use `angle=value` (specify radians)
+- Never use `end_angle` parameter
 
 ### Text Objects
 - **ALWAYS use Text() with font_size parameter**
@@ -106,15 +124,6 @@ axes = Axes(
 - Deprecated Manim methods
 - Non-ASCII text content
 
-## OUTPUT FORMAT REQUIREMENTS
-
-**GENERATE ONLY RAW PYTHON CODE**
-- No markdown formatting
-- No code blocks with ```
-- No explanations or comments outside code
-- No TODO or placeholder text
-- Start immediately with: from manim import *
-
 ## EXECUTION ENVIRONMENT REMINDER
 This code will run in a minimal Python environment with:
 - Only manim and numpy available
@@ -122,8 +131,12 @@ This code will run in a minimal Python environment with:
 - No external font files
 - No Unicode support for text rendering
 - ASCII-only character encoding
-
-Generate clean, executable Python code that follows ALL these constraints to prevent encoding errors and missing dependency issues.
+- ALWAYS PAY ATTENTION TO COLORS DEFINED : WHITE, RED, BLUE, GREEN, YELLOW, ORANGE, PINK, PURPLE, GRAY
+- NO COLOR OTHER THAN THESE EXIST
+- BROWN DOESNT EXIST IN MANIM AVOID THAT
+- DashedCircle, DashedRectangle,etc is NOT DEFINED in manim, DON'T USE THESE CLASSES
+- VGroup object has no attribute 'fade_out'
+- Line object has no attribute 'unit_normal'
 """
 
 
@@ -135,17 +148,18 @@ def manim_script_from_prompt(history: list[dict[str, str]]) -> str:
     try:
         contents = build_content_list(history)
 
-        resp = client.models.generate_content(
+        resp = client.models.generate_content_stream(
             model="gemini-2.5-flash-preview-05-20",
             config=types.GenerateContentConfig(
-                temperature=0.1,
+                temperature=0.2,
                 max_output_tokens=20_000,
                 system_instruction=SYSTEM_PROMPT
             ),
             contents=contents
         )
-
-        return _extract_response_text(resp)
+        for chunk in resp:
+          print(chunk.text, end="")
+        # return _extract_response_text(resp)
 
     except Exception as e:
         print("Error generated at 170 gemini.py", e)
