@@ -86,7 +86,6 @@ from app.utils.video import generate_video_from_stream
 from app.db.db import SessionLocal
 import asyncio
 import uuid
-import time
 @router.post("/prompt-stream")
 async def stream_chat(body: PromptReq, req: Request, background_tasks: BackgroundTasks,session: Session = Depends(get_session)):
     user_id = req.state.user_id
@@ -269,7 +268,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             create_message(session, new_message)
             session.commit()
 
-            # background_tasks.add_task(generate_video_background, code_text, chat_id,request_id)
+            background_tasks.add_task(generate_video_background, code_text, chat_id,request_id)
 
         except Exception as e:
             session.rollback()
