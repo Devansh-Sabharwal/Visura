@@ -13,13 +13,19 @@ export async function middleware(request: NextRequest) {
     )){
         return NextResponse.redirect(new URL('/'))
     }
-  return NextResponse.redirect(new URL('/', request.url))
+  if (!token && url.pathname.startsWith('/chat')) {
+    return NextResponse.redirect(new URL('/auth/signin', request.url));
+  }
+
+  // Allow through otherwise
+  return NextResponse.next();
+
 }
  
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    
+    '/chat'
 
   ]
 }

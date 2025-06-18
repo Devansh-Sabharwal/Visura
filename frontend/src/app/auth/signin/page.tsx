@@ -1,56 +1,58 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleGoogleLogin = async () => {
-  setLoading(true);
-  setError('');
-  try {
-    await signIn('google', {
-      callbackUrl: '/' // Let it redirect after successful login
-    });
-  } catch (err) {
-    setError('Google sign-in failed.');
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setError("");
+    try {
+      await signIn("google", {
+        callbackUrl: "/", // Let it redirect after successful login
+      });
+    } catch (err) {
+      setError("Google sign-in failed.");
+      setLoading(false);
+    }
+  };
 
   const handleCredentialsLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
-        callbackUrl: '/',
+        callbackUrl: "/",
       });
 
       if (result?.error) {
         // Handle specific error cases
-        if (result.error === 'CredentialsSignin') {
-          setError('Invalid email or password');
+        if (result.error === "CredentialsSignin") {
+          setError("Invalid email or password");
         } else {
-          setError('Sign-in failed: ' + result.error);
+          setError("Sign-in failed: " + result.error);
         }
       } else {
         // Success - redirect
         alert("successful");
-        router.push('/');
+        toast.success("successful");
+        router.push("/chat");
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -68,7 +70,7 @@ export default function SignInPage() {
           placeholder="Email"
           required
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full px-4 py-2 border rounded"
           disabled={loading}
         />
@@ -77,7 +79,7 @@ export default function SignInPage() {
           placeholder="Password"
           required
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           className="w-full px-4 py-2 border rounded"
           disabled={loading}
         />
@@ -86,7 +88,7 @@ export default function SignInPage() {
           disabled={loading}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          {loading ? 'Signing in...' : 'Sign in with Credentials'}
+          {loading ? "Signing in..." : "Sign in with Credentials"}
         </button>
       </form>
 
@@ -97,7 +99,7 @@ export default function SignInPage() {
         disabled={loading}
         className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 disabled:opacity-50"
       >
-        {loading ? 'Signing in...' : 'Sign in with Google'}
+        {loading ? "Signing in..." : "Sign in with Google"}
       </button>
     </div>
   );
