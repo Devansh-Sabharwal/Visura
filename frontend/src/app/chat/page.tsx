@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useChatStore } from "@/store/store";
 import Input from "@/components/Input";
 import toast from "react-hot-toast";
+import ChatInterface from "@/components/ChatInterface";
 
 export default function ChatPage() {
   const params = useParams();
@@ -26,8 +27,8 @@ export default function ChatPage() {
 
   return (
     <>
-      <Input />
-
+      {/* <Input /> */}
+      <ChatInterface />
       {/* <button onClick={() => toast.error("Test error")}>Test Toast</button> */}
     </>
   );
