@@ -5,7 +5,7 @@ export default function AnimationWindow() {
   ];
   return (
     <div>
-      <div className="p-4">title</div>
+      <div className="p-4">title change</div>
     </div>
   );
 }
