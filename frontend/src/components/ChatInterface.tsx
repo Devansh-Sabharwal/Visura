@@ -14,11 +14,12 @@ export default function ChatInterface() {
       <div className="h-[56px] border-b border-white/10">Navbar</div>
       <div className="flex-1 mb-2 flex w-screen h-full overflow-y-auto">
         <div className="flex-1 flex h-full w-full">
+          <div className="w-16">side</div>
           <div className="bg-black-100 h-full flex-1">
             <ChatWindow />
           </div>
           <div className="bg-black-100  h-full flex-2 flex flex-col ml-3 ">
-            <div className=" flex-1 border mt-4 border-white/20 rounded-xl h-full">
+            <div className=" flex-1 border bg-[#171717] mt-4 border-white/10 rounded-xl h-full">
               <AnimationWindow />
             </div>
           </div>
