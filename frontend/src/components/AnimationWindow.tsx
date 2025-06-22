@@ -1,5 +1,6 @@
 import { Tabs } from "./ui/Tabs";
 import CodeBlock from "./ui/CodeBlock";
+import VideoPlayer from "./ui/VideoPlayer";
 export default function AnimationWindow() {
   const demo = "def main:";
   const tabs = [
@@ -15,7 +16,11 @@ export default function AnimationWindow() {
     {
       title: "Animation",
       value: "Animation",
-      content: <div>animation</div>,
+      content: (
+        <div>
+          <VideoPlayer url="https://player.cloudinary.com/embed/?cloud_name=dbyfsythn&public_id=manim_videos%2Fmanim_videos%2Ftest-frontend%2F032a20f6&profile=cld-default" />
+        </div>
+      ),
     },
   ];
   return (
