@@ -9,6 +9,14 @@ from app.db.crud import create_message,getContext
 from app.utils.video import generate_video,generate_video_from_stream
 from sqlmodel import select
 from typing import Optional
+from fastapi.responses import StreamingResponse
+from fastapi import BackgroundTasks
+from app.gemini import build_content_list, client, types, SYSTEM_PROMPT
+import json
+from app.utils.video import generate_video_from_stream
+from app.db.db import SessionLocal
+import asyncio
+import uuid
 
 class ChatResponse(BaseModel):
     success: bool
@@ -78,14 +86,7 @@ async def chat(body:PromptReq,req:Request,session:Session=Depends(get_session)):
         raise HTTPException(status_code=501,detail=f"Error in Video generation try again: {str(e)}")
 
 
-from fastapi.responses import StreamingResponse
-from fastapi import BackgroundTasks
-from app.gemini import build_content_list, client, types, SYSTEM_PROMPT
-import json
-from app.utils.video import generate_video_from_stream
-from app.db.db import SessionLocal
-import asyncio
-import uuid
+
 @router.post("/prompt-stream")
 async def stream_chat(body: PromptReq, req: Request, background_tasks: BackgroundTasks,session: Session = Depends(get_session)):
     user_id = req.state.user_id
