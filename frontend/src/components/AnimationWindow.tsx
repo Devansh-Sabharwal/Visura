@@ -18,7 +18,7 @@ export default function AnimationWindow() {
       value: "Animation",
       content: (
         <div className="h-full">
-          <VideoPlayer url="https://player.cloudinary.com/embed/?cloud_name=dbyfsythn&public_id=manim_videos%2Fmanim_videos%2Ftest-frontend%2F032a20f6&profile=cld-default" />
+          <VideoPlayer />
         </div>
       ),
     },
