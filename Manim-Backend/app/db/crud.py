@@ -18,6 +18,7 @@ def create_message(session:Session,message:Message)->Message:
 
 def create_video(session:Session,video:ManimVideo):
     session.add(video)
+    session.commit()
 
 
 def getContext(session: Session, chatId: str, limit: int = 3):

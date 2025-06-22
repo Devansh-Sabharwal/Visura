@@ -127,7 +127,8 @@ async def generate_video_from_stream(script,chatId,request_id,session):
             url=cloudinary_response['secure_url']
         )
         create_video(session, video)
-
+        print("video created")
+        print(cloudinary_response['secure_url'])
         return {
             "video_url": cloudinary_response['secure_url'],
             "public_id": cloudinary_response['public_id']
@@ -194,7 +195,7 @@ async def upload_video_to_cloudinary(video_path: Path, chatId: str, file_id: str
     """Upload video to Cloudinary with optimizations"""
     try:
         print("cloudinary process begins")
-        start = time.time
+        start = time.time()
         response = cloudinary.uploader.upload(
             str(video_path),
             resource_type="video",

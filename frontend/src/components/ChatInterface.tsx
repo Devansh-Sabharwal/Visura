@@ -18,7 +18,7 @@ export default function ChatInterface() {
           <div className="bg-black-100 h-full flex-1">
             <ChatWindow />
           </div>
-          <div className="bg-black-100  h-full flex-2 flex flex-col ml-3 ">
+          <div className="bg-black-100  h-full flex-2 flex flex-col ml-3 overflow-auto hide-scrollbar ">
             <div className=" flex-1 border bg-[#171717] mt-4 border-white/10 rounded-xl h-full">
               <AnimationWindow />
             </div>
