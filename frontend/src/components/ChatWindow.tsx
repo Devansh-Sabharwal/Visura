@@ -27,7 +27,7 @@ export default function ChatWindow() {
   }, [messages]);
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <div className="flex-1 overflow-y-auto hide-scrollbar flex flex-col gap-3">
+      <div className="flex-1 overflow-y-auto hide-scrollbar pt-4 flex flex-col gap-3">
         {messages.map((msg, index) => (
           <div
             key={index}

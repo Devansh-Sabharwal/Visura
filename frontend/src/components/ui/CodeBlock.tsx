@@ -27,7 +27,7 @@ export default function CodeBlock({
   title,
   showLineNumbers = true,
   theme = "dark",
-  maxHeight = "450px",
+  maxHeight = "500px",
   showCopyButton = true,
   showDownloadButton = false,
   showCollapseButton = false,
