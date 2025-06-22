@@ -24,7 +24,7 @@ export const Tabs = ({
   const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
 
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex-col flex">
       <div
         className={cn(
           "flex gap-1 items-center px-2 pb-1 border-b border-white/10",
@@ -49,7 +49,7 @@ export const Tabs = ({
           ))}
         </div>
       </div>
-      <div className={cn("", contentClassName)}>{activeTab.content}</div>
+      <div className={cn("h-full", contentClassName)}>{activeTab.content}</div>
     </div>
   );
 };
