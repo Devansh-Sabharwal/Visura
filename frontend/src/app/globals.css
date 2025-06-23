@@ -9,6 +9,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-black-100: oklch(0.173 0 0);
+  --color-black-200: #171717;
+  --color-button-bg: #5a5a5a;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-inter: var(--font-inter);

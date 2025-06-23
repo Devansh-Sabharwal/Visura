@@ -39,7 +39,7 @@ export const Tabs = ({
               className={cn(
                 "px-6 py-2 cursor-pointer rounded-md text-sm font-medium transition-all ",
                 activeTab.value === tab.value
-                  ? "bg-[#303030] text-white"
+                  ? "bg-button-bg text-white"
                   : " text-white/80 hover:bg-[#2b2b2b]",
                 tabClassName
               )}
