@@ -26,11 +26,12 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       ref={divRef}
       onClick={() => {}}
       className={`${
-        open ? "translate-x-28" : "-translate-x-100"
+        open ? "translate-x-2" : "-translate-x-100"
       } transition-all duration-400 absolute border p-4 border-white/10 rounded-lg w-72 h-full bg-black-200`}
     >
       <div className="flex w-full justify-end">
         <X
+          className="cursor-pointer"
           onClick={() => {
             setOpen(false);
           }}

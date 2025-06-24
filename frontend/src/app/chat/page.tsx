@@ -3,7 +3,7 @@
 import { useRouter, useParams } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useChatStore } from "@/store/store";
+import { useChatStore } from "@/store/chatStore";
 import Input from "@/components/Input";
 import toast from "react-hot-toast";
 import ChatInterface from "@/components/ChatInterface";
@@ -27,8 +27,8 @@ export default function ChatPage() {
 
   return (
     <>
-      {/* <Input /> */}
-      <ChatInterface />
+      <Input />
+      {/* <ChatInterface /> */}
       {/* <button onClick={() => toast.error("Test error")}>Test Toast</button> */}
     </>
   );

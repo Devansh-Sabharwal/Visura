@@ -160,8 +160,8 @@ export default function CodeBlock({
                 onClick={handleCopy}
                 className={`p-1.5 rounded-md transition-colors ${
                   isDark
-                    ? "hover:bg-gray-700 text-gray-400 hover:text-gray-200"
-                    : "hover:bg-gray-200 text-gray-600 hover:text-gray-800"
+                    ? "hover:bg-button-bg text-gray-400 hover:text-gray-200"
+                    : "hover:bg-gray-200 text-button-bg hover:text-gray-800"
                 }`}
                 title="Copy code"
               >
@@ -179,7 +179,7 @@ export default function CodeBlock({
       {/* Code Content */}
       {!isCollapsed && (
         <div className="relative">
-          <div className="overflow-auto custom-scrollbar" style={{ maxHeight }}>
+          <div className="overflow-auto custom-scrollbar max-h-[calc(100vh-220px)]">
             <SyntaxHighlighter
               language={language}
               style={syntaxTheme}

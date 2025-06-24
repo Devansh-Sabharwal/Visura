@@ -1,12 +1,6 @@
 import { create } from "zustand";
-import { Message } from "../../types/message";
 
-type Chat = {
-  chatId: string | undefined;
-  setChatId: (chatId: string) => void;
-  messages: Message[];
-  setMessages: (messages: Message[]) => void;
-};
+import { Chat } from "../../types/chat";
 
 export const useChatStore = create<Chat>((set) => ({
   chatId: undefined,

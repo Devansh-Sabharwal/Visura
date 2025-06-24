@@ -1,4 +1,4 @@
-import { useChatStore } from "@/store/store";
+import { useChatStore } from "@/store/chatStore";
 import { useParams } from "next/navigation";
 import React from "react";
 import ChatWindow from "./ChatWindow";
