@@ -5,4 +5,6 @@ export type Chat = {
   setChatId: (chatId: string) => void;
   messages: Message[];
   setMessages: (messages: Message[]) => void;
+  isLoading: boolean;
+  setLoading: (state: boolean) => void;
 };

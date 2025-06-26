@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Prompt } from "../../types/prompt";
+import { Prompt } from "../types/prompt";
 
 export const usePromptStore = create<Prompt>((set) => ({
   prompt: "",

@@ -2,27 +2,45 @@ import { useChatStore } from "@/store/chatStore";
 import Input from "./ui/InputBox";
 import { useEffect, useRef, useState } from "react";
 import ChatBubble from "./ui/ChatBubble";
+import { useCodeStore } from "@/store/codeStore";
+import { usePromptStore } from "@/store/promptStore";
 
 export default function ChatWindow() {
-  const chatId = useChatStore((state) => state.chatId);
   const messages = useChatStore((state) => state.messages);
   const setMessages = useChatStore((state) => state.setMessages);
+  const setLoading = useChatStore((state) => state.setLoading);
+  const loading = useChatStore((state) => state.isLoading);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const [isThinking, setIsThinking] = useState<boolean>(false);
-  const [prompt, setPrompt] = useState<string>("");
+  const setCode = useCodeStore((state) => state.setCode);
+  const prompt = usePromptStore((state) => state.prompt);
+  const setPrompt = usePromptStore((state) => state.setPrompt);
   const handleSubmit = () => {
     if (prompt.trim() == "") return;
     const newMessages = [
       ...messages,
-      { role: "user", content: prompt, createdAt: Date.now().toString() },
+      { role: "user", content: prompt, timestamp: Date.now().toString() },
     ];
     setPrompt("");
     setMessages(newMessages);
-    setIsThinking(true);
+    setLoading(true);
   };
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role === "model") {
+        try {
+          const content = JSON.parse(messages[i].content);
+          if (content?.code) {
+            setCode(content.code.trim());
+            return;
+          }
+        } catch (err) {
+          alert("error in parsing code");
+        }
+      }
     }
   }, [messages]);
   return (
@@ -38,15 +56,16 @@ export default function ChatWindow() {
             <ChatBubble role={msg.role} text={msg.content} />
           </div>
         ))}
-        {isThinking && (
-          <div className="flex justify-start">
-            <ChatBubble role="assistant" text="..." />
-          </div>
-        )}
+        {loading && <div className="flex justify-start">...</div>}
         <div ref={messagesEndRef} />
       </div>
       <div className="mx-2">
-        <Input prompt={prompt} setPrompt={setPrompt} onSubmit={handleSubmit} />
+        <Input
+          disabled={loading}
+          prompt={prompt}
+          setPrompt={setPrompt}
+          onSubmit={handleSubmit}
+        />
       </div>
     </div>
   );

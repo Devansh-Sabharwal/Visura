@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import InputBox from "./ui/InputBox";
@@ -17,8 +18,7 @@ export default function NewChat() {
   const onSubmit = () => {
     if (prompt?.trim() == "") return;
     const newMessages = [
-      ...messages,
-      { role: "user", content: prompt, createdAt: Date.now().toString() },
+      { role: "user", content: prompt, timestamp: Date.now().toString() },
     ];
     setMessages(newMessages);
     const chatId = uuidv4();
@@ -54,6 +54,7 @@ export default function NewChat() {
           </div>
           <div className="mt-8 flex justify-center">
             <InputBox
+              disabled={false}
               prompt={prompt}
               setPrompt={setPrompt}
               onSubmit={onSubmit}

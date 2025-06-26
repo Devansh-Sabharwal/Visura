@@ -136,9 +136,5 @@ export default function Input() {
     );
   };
 
-  return (
-    <>
-      <NewChat />
-    </>
-  );
+  return <></>;
 }

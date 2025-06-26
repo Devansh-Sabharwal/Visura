@@ -5,13 +5,16 @@ interface InputProps {
   onSubmit?: () => void;
   prompt: string;
   className?: string;
+  disabled: boolean;
 }
 export default function InputBox({
   prompt,
   setPrompt,
   onSubmit = () => {},
   className,
+  disabled,
 }: InputProps) {
+  console.log(prompt);
   return (
     <div
       className={`${
@@ -21,6 +24,7 @@ export default function InputBox({
       }`}
     >
       <textarea
+        disabled={disabled}
         onChange={(e) => setPrompt(e.target.value)}
         onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
           if (event.key === "Enter" && !event.shiftKey) {

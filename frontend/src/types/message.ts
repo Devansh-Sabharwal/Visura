@@ -1,5 +1,6 @@
 export type Message = {
   role: string;
   content: string;
-  createdAt: string;
+  timestamp: string;
+  videoUrl?: string;
 };
