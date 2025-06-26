@@ -1,17 +1,21 @@
 from fastapi import APIRouter,Depends,HTTPException
-from app.db.models import Message
+from app.db.models import Message,Chat
 from sqlmodel import Session
 from app.db.db import get_session
 from sqlmodel import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import SQLAlchemyError
-
+from fastapi.responses import JSONResponse
 router = APIRouter(tags=["Messages"])
 
 @router.get('/{chatId}/messages')
 async def get_chat_messages(chatId: str, session: Session = Depends(get_session)):
     """Get all messages for a chat"""
     try:
+        chat = session.exec(select(Chat).where(Chat.id == chatId)).first()
+        if not chat:
+            return JSONResponse(status_code=400,content={"message":"Page Not found"})
+            
         messages = session.exec(
             select(Message)
             .where(Message.chatId == chatId)
