@@ -93,7 +93,7 @@ async def generate_video(context, chatId, session):
                     print(f"Failed to delete {file.name} in media dir: {e}")
         
 
-async def generate_video_from_stream(script,chatId,request_id,session):
+async def generate_video_from_stream(script,chatId,request_id,message_id,session):
     py_file = None
     vid_path = None
 
@@ -126,7 +126,14 @@ async def generate_video_from_stream(script,chatId,request_id,session):
             chatId=chatId,
             url=cloudinary_response['secure_url']
         )
-        create_video(session, video)
+        session.add(video)
+        session.commit()
+        session.refresh(video)
+        message = session.get(Message, message_id)
+        if message:
+            message.video_id = video.id
+            session.add(message)
+            session.commit()
         print("video created")
         print(cloudinary_response['secure_url'])
         return {
