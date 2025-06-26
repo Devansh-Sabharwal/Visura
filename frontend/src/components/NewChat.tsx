@@ -5,16 +5,29 @@ import { usePromptStore } from "@/store/promptStore";
 import Suggestion from "./ui/Suggestion";
 import { Sidebar } from "lucide-react";
 import SidebarComponent from "./Sidebar";
-
+import { useChatStore } from "@/store/chatStore";
+import { v4 as uuidv4 } from "uuid";
 export default function NewChat() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
+  const messages = useChatStore((state) => state.messages);
+  const setMessages = useChatStore((state) => state.setMessages);
+  const onSubmit = () => {
+    if (prompt?.trim() == "") return;
+    const newMessages = [
+      ...messages,
+      { role: "user", content: prompt, createdAt: Date.now().toString() },
+    ];
+    setMessages(newMessages);
+    const chatId = uuidv4();
+    router.push(`/chat/${chatId}`);
+  };
+  //fetch history
   return (
     <div className="h-screen w-screen angular-gradient overflow-auto px-4 sm:px-4">
-      <SidebarComponent open={open} setOpen={setOpen} />
+      <SidebarComponent translate={"0"} open={open} setOpen={setOpen} />
 
       <div className="h-fit px-2 sm:px-4 py-8 flex justify-between">
         <div className="flex px-2 sm:px-6 items-center">
@@ -27,7 +40,7 @@ export default function NewChat() {
             <img src="/logo2.svg" alt="Logo" className="h-6 sm:h-[40px]" />
           </div>
         </div>
-        <button className="mr-2 hover:scale-105 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/50">
+        <button className="mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60">
           Logout
         </button>
       </div>
@@ -40,7 +53,12 @@ export default function NewChat() {
             Create stunning 2D animations by chatting with AI.
           </div>
           <div className="mt-8 flex justify-center">
-            <InputBox className="bg-[#9C9999]/10 border w-[360px] sm:w-md flex border-white/40 rounded-lg h-32 justify-end p-4" />
+            <InputBox
+              prompt={prompt}
+              setPrompt={setPrompt}
+              onSubmit={onSubmit}
+              className="bg-[#9C9999]/10 border w-[360px] sm:w-md flex border-white/20 rounded-lg h-32 justify-end p-4"
+            />
           </div>
         </div>
       </div>

@@ -1,14 +1,14 @@
 import { ArrowUp } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 interface InputProps {
-  setPrompt?: Dispatch<SetStateAction<string>>;
+  setPrompt: (prompt: string) => void;
   onSubmit?: () => void;
-  prompt?: string;
+  prompt: string;
   className?: string;
 }
 export default function InputBox({
-  prompt = "",
-  setPrompt = () => {},
+  prompt,
+  setPrompt,
   onSubmit = () => {},
   className,
 }: InputProps) {

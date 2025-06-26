@@ -12,11 +12,11 @@ export default function ChatWindow() {
   const [prompt, setPrompt] = useState<string>("");
   const handleSubmit = () => {
     if (prompt.trim() == "") return;
-    setPrompt("");
     const newMessages = [
       ...messages,
       { role: "user", content: prompt, createdAt: Date.now().toString() },
     ];
+    setPrompt("");
     setMessages(newMessages);
     setIsThinking(true);
   };

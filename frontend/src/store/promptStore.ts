@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { Prompt } from "../../types/prompt";
 
 export const usePromptStore = create<Prompt>((set) => ({
-  prompt: undefined,
+  prompt: "",
   setPrompt: (prompt) => {
     set({ prompt });
   },

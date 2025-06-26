@@ -1,4 +1,4 @@
 export type Prompt = {
-  prompt: string | undefined;
+  prompt: string;
   setPrompt: (prompt: string) => void;
 };

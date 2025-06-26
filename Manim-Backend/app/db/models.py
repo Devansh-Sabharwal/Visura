@@ -28,10 +28,12 @@ class Chat(SQLModel, table=True):
 class Message(SQLModel, table=True):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     chatId: str = Field(foreign_key="chat.id")
+    video_id: Optional[str] = Field(default=None, foreign_key="manimvideo.id")
     role: str
     content: str
     createdAt : datetime = Field(default_factory=datetime.now)
     chat: Chat = Relationship(back_populates="messages")
+    video: Optional["ManimVideo"] = Relationship(back_populates="message")
 
 
 class ManimVideo(SQLModel, table=True):
@@ -41,3 +43,4 @@ class ManimVideo(SQLModel, table=True):
     title: Optional[str]
     createdAt : datetime = Field(default_factory=datetime.now)
     chat: Chat = Relationship(back_populates="videos")
+    message: Optional["Message"] = Relationship(back_populates="video")

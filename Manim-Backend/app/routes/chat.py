@@ -265,11 +265,11 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             }
             content = json.dumps(data)
                         
-            new_message = Message(role="model", content=content,chatId=chat_id)
-            create_message(session, new_message)
+            new_message = Message(role="model", content=content,chatId=chat_id,video_id=request_id)
+            message = create_message(session, new_message)
             session.commit()
 
-            background_tasks.add_task(generate_video_background, code_text, chat_id,request_id)
+            background_tasks.add_task(generate_video_background, code_text, chat_id,request_id,message.id)
 
         except Exception as e:
             session.rollback()
@@ -278,10 +278,10 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
     return StreamingResponse(generate_stream(), media_type="text/plain")
 
 
-def generate_video_background(code_text, chat_id,request_id):
+def generate_video_background(code_text, chat_id,request_id,message_id):
     session = SessionLocal()
     try:
-        asyncio.run(generate_video_from_stream(code_text, chat_id, request_id,session))
+        asyncio.run(generate_video_from_stream(code_text, chat_id, request_id,message_id,session))
     except Exception as e:
         
         print(f"[VideoGen Error] for chat_id={chat_id}: {str(e)}")
