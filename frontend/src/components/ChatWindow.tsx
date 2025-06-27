@@ -1,11 +1,16 @@
 import { useChatStore } from "@/store/chatStore";
 import Input from "./ui/InputBox";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import ChatBubble from "./ui/ChatBubble";
 import { useCodeStore } from "@/store/codeStore";
 import { usePromptStore } from "@/store/promptStore";
+import { fetchPromptStream } from "@/api/prompt";
+import { useSession } from "next-auth/react";
+import { BeatLoader } from "react-spinners";
 
 export default function ChatWindow() {
+  const { data } = useSession();
+  const chatId = useChatStore((state) => state.chatId);
   const messages = useChatStore((state) => state.messages);
   const setMessages = useChatStore((state) => state.setMessages);
   const setLoading = useChatStore((state) => state.setLoading);
@@ -20,27 +25,24 @@ export default function ChatWindow() {
       ...messages,
       { role: "user", content: prompt, timestamp: Date.now().toString() },
     ];
-    setPrompt("");
     setMessages(newMessages);
     setLoading(true);
+    const temp = prompt;
+    setPrompt("");
+    fetchPromptStream({
+      prompt: temp,
+      chatId: chatId || "",
+      token: data?.fastApiToken!,
+      messages,
+      setMessages,
+      setPrompt,
+      setCode,
+      setLoading,
+    });
   };
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-
-    for (let i = messages.length - 1; i >= 0; i--) {
-      if (messages[i].role === "model") {
-        try {
-          const content = JSON.parse(messages[i].content);
-          if (content?.code) {
-            setCode(content.code.trim());
-            return;
-          }
-        } catch (err) {
-          alert("error in parsing code");
-        }
-      }
     }
   }, [messages]);
   return (
@@ -56,7 +58,13 @@ export default function ChatWindow() {
             <ChatBubble role={msg.role} text={msg.content} />
           </div>
         ))}
-        {loading && <div className="flex justify-start">...</div>}
+        {loading && (
+          <div className="flex justify-center mt-1">
+            <span className="text-white">
+              <BeatLoader color="white" size={12} />
+            </span>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
       <div className="mx-2">

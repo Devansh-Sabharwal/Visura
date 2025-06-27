@@ -1,4 +1,3 @@
-// Simplified AnimationWindow.tsx
 import { Tabs } from "./ui/Tabs";
 import CodeBlock from "./ui/CodeBlock";
 import VideoPlayer from "./ui/VideoPlayer";

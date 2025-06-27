@@ -13,7 +13,6 @@ export default function NewChat() {
   const [open, setOpen] = useState(false);
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
-  const messages = useChatStore((state) => state.messages);
   const setMessages = useChatStore((state) => state.setMessages);
   const onSubmit = () => {
     if (prompt?.trim() == "") return;
@@ -22,7 +21,9 @@ export default function NewChat() {
     ];
     setMessages(newMessages);
     const chatId = uuidv4();
-    router.push(`/chat/${chatId}`);
+    // router.push(`/chat/${chatId}`);
+    console.log("onSubmit called");
+    router.push(`/chat/test-frontend`);
   };
   //fetch history
   return (

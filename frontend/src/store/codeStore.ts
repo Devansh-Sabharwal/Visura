@@ -8,6 +8,7 @@ type Code = {
 export const useCodeStore = create<Code>((set) => ({
   code: "",
   setCode: (code) => {
+    console.log("code is set to ", Date.now(), code);
     set({ code });
   },
 }));

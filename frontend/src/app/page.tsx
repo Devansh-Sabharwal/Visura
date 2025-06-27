@@ -1,5 +1,3 @@
-
-
 export default function page() {
   return (
     <div className="bg-black text-white">
@@ -7,5 +5,5 @@ export default function page() {
         Manim Landing Page
       </div>
     </div>
-  )
+  );
 }

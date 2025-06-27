@@ -4,7 +4,7 @@ export type Chat = {
   chatId: string | undefined;
   setChatId: (chatId: string) => void;
   messages: Message[];
-  setMessages: (messages: Message[]) => void;
+  setMessages: (messages: Message[] | ((prev: Message[]) => Message[])) => void;
   isLoading: boolean;
   setLoading: (state: boolean) => void;
 };

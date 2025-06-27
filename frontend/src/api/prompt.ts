@@ -1,0 +1,114 @@
+import { Message } from "@/types/message";
+import toast from "react-hot-toast";
+
+export async function fetchPromptStream({
+  prompt,
+  chatId,
+  token,
+  messages,
+  setMessages,
+  setPrompt,
+  setCode,
+  setLoading,
+}: {
+  prompt: string;
+  chatId: string;
+  token: string;
+  messages: Message[];
+  setMessages: (update: Message[] | ((prev: Message[]) => Message[])) => void;
+  setPrompt: (value: string) => void;
+  setCode: (value: string) => void;
+  setLoading: (val: boolean) => void;
+}) {
+  if (!prompt.trim()) return;
+  setLoading(true);
+  setMessages((prevMessages) => [
+    ...prevMessages,
+    {
+      role: "model",
+      content: "",
+      timestamp: Date.now().toString(),
+    },
+  ]);
+
+  let explanation = "";
+  let code = "";
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_FASTAPI_URL}/chat/prompt-stream`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ prompt, chatId }),
+      }
+    );
+
+    setPrompt("");
+
+    if (!res.body) {
+      setLoading(false);
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    let buffer = "";
+
+    while (true) {
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      buffer += chunk;
+
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        if (!line.trim() || !line.startsWith("data: ")) continue;
+
+        const jsonStr = line.slice(6).trim();
+        if (jsonStr === "[DONE]") {
+          continue;
+        }
+
+        try {
+          const payload = JSON.parse(jsonStr);
+
+          if (payload.type === "explanation" && payload.text) {
+            explanation += payload.text;
+            setLoading(false);
+          } else if (payload.type === "code" && payload.text) {
+            code += payload.text;
+          } else if (payload.type === "done") {
+          }
+
+          setMessages((prevMessages) => {
+            const updated = [...prevMessages];
+            const lastIndex = updated.length - 1;
+            if (updated[lastIndex]?.role === "model") {
+              updated[lastIndex] = {
+                ...updated[lastIndex],
+                content: JSON.stringify({ explanation, code }),
+              };
+            }
+            return updated;
+          });
+
+          if (code.trim()) setCode(code);
+        } catch (err) {
+          console.error("Invalid JSON chunk:", line, err);
+        }
+      }
+    }
+  } catch (error) {
+    toast.error("Streaming error:");
+    setLoading(false);
+  }
+}

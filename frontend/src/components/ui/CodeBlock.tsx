@@ -179,7 +179,7 @@ export default function CodeBlock({
       {/* Code Content */}
       {!isCollapsed && (
         <div className="relative">
-          <div className="overflow-auto custom-scrollbar max-h-[calc(100vh-220px)]">
+          <div className="overflow-auto custom-scrollbar max-h-[calc(100vh-220px)] max-w-[calc(75vw-220px)]">
             <SyntaxHighlighter
               language={language}
               style={syntaxTheme}

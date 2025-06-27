@@ -8,11 +8,11 @@ export const useChatStore = create<Chat>((set) => ({
     set({ chatId });
   },
   messages: [],
-  setMessages: (messages) => {
-    set(() => ({
-      messages: messages,
-    }));
-  },
+  setMessages: (messages) =>
+    set((state) => ({
+      messages:
+        typeof messages === "function" ? messages(state.messages) : messages,
+    })),
   isLoading: false,
   setLoading: (state: boolean) => {
     set(() => ({

@@ -1,16 +1,9 @@
-import { useChatStore } from "@/store/chatStore";
-import { useParams } from "next/navigation";
-import React from "react";
 import ChatWindow from "./ChatWindow";
 import AnimationWindow from "./AnimationWindow";
 import ChatSidebar from "./ChatSidebar";
 import Navbar from "./Navbar";
 
 export default function ChatInterface() {
-  const { chatId } = useParams();
-  const setMessages = useChatStore((state) => state.setMessages);
-  const messages = useChatStore((state) => state.messages);
-
   return (
     <div className="flex flex-col h-screen font-inter tracking-wide">
       <div>

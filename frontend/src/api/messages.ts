@@ -1,5 +1,3 @@
-import { useSession } from "next-auth/react";
-
 const BASE_URL = process.env.NEXT_PUBLIC_FASTAPI_URL;
 export const getMessages = async (chatId: string, token: string) => {
   console.log("getMessages called", `${BASE_URL}/${chatId}/messages`);

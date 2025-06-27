@@ -8,6 +8,7 @@ import { useMessages } from "@/hooks/useMessages";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useCodeStore } from "@/store/codeStore";
+import { fetchPromptStream } from "@/api/prompt";
 
 export default function Chat() {
   const router = useRouter();
@@ -19,16 +20,39 @@ export default function Chat() {
     isPending,
     error,
     isError,
-  } = useMessages(cid ?? "", data?.fastApiToken ?? "");
+    refetch,
+  } = useMessages(cid, data?.fastApiToken ?? "");
   const setChatId = useChatStore((state) => state.setChatId);
   const setMessages = useChatStore((state) => state.setMessages);
+  const messages = useChatStore((state) => state.messages);
   const setLoading = useChatStore((state) => state.setLoading);
   const setCode = useCodeStore((state) => state.setCode);
   const prompt = usePromptStore((state) => state.prompt);
+  const setPrompt = usePromptStore((state) => state.setPrompt);
   useEffect(() => {
     setChatId(cid);
     setCode("");
   }, [cid]);
+
+  useEffect(() => {
+    if (!prompt.trim()) {
+      refetch();
+      return;
+    }
+    const fetchData = async () => {
+      await fetchPromptStream({
+        prompt,
+        chatId: cid,
+        token: data?.fastApiToken!,
+        messages,
+        setMessages,
+        setPrompt,
+        setCode,
+        setLoading,
+      });
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -40,7 +64,7 @@ export default function Chat() {
       } else if (error.message == "Chat not found") {
         toast.error(error?.message || "Failed to load messages.");
         setTimeout(() => {
-          //   router.push("/chat");
+          router.push("/chat");
         }, 3000);
       } else {
         toast.error(error?.message || "Failed to load messages.");

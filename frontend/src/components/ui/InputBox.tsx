@@ -14,7 +14,6 @@ export default function InputBox({
   className,
   disabled,
 }: InputProps) {
-  console.log(prompt);
   return (
     <div
       className={`${
