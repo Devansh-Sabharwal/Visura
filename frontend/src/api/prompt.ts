@@ -1,3 +1,4 @@
+import { useActiveTabStore } from "@/store/activeTabStore";
 import { Message } from "@/types/message";
 import toast from "react-hot-toast";
 
@@ -5,11 +6,12 @@ export async function fetchPromptStream({
   prompt,
   chatId,
   token,
-  messages,
   setMessages,
   setPrompt,
   setCode,
   setLoading,
+  setRequestId,
+  setActiveTab,
 }: {
   prompt: string;
   chatId: string;
@@ -19,6 +21,8 @@ export async function fetchPromptStream({
   setPrompt: (value: string) => void;
   setCode: (value: string) => void;
   setLoading: (val: boolean) => void;
+  setRequestId: (val: string) => void;
+  setActiveTab: (val: string) => void;
 }) {
   if (!prompt.trim()) return;
   setLoading(true);
@@ -47,13 +51,12 @@ export async function fetchPromptStream({
       }
     );
 
-    setPrompt("");
-
     if (!res.body) {
       setLoading(false);
       return;
     }
 
+    setPrompt("");
     const reader = res.body.getReader();
     const decoder = new TextDecoder("utf-8");
 
@@ -85,8 +88,11 @@ export async function fetchPromptStream({
             explanation += payload.text;
             setLoading(false);
           } else if (payload.type === "code" && payload.text) {
+            setActiveTab("Code");
             code += payload.text;
           } else if (payload.type === "done") {
+            setRequestId(payload.request_id);
+            setActiveTab("Animation");
           }
 
           setMessages((prevMessages) => {

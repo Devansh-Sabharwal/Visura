@@ -7,6 +7,8 @@ import { usePromptStore } from "@/store/promptStore";
 import { fetchPromptStream } from "@/api/prompt";
 import { useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
+import { useAnimationStore } from "@/store/animationStore";
+import { useActiveTabStore } from "@/store/activeTabStore";
 
 export default function ChatWindow() {
   const { data } = useSession();
@@ -19,6 +21,9 @@ export default function ChatWindow() {
   const setCode = useCodeStore((state) => state.setCode);
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
+  const setRequestId = useAnimationStore((state) => state.setRequestId);
+  const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
+
   const handleSubmit = () => {
     if (prompt.trim() == "") return;
     const newMessages = [
@@ -38,6 +43,8 @@ export default function ChatWindow() {
       setPrompt,
       setCode,
       setLoading,
+      setRequestId,
+      setActiveTab,
     });
   };
   useEffect(() => {
@@ -55,7 +62,11 @@ export default function ChatWindow() {
               msg.role === "user" ? "justify-end" : "justify-start"
             } mx-2 my-1`}
           >
-            <ChatBubble role={msg.role} text={msg.content} />
+            <ChatBubble
+              role={msg.role}
+              text={msg.content}
+              videoUrl={msg.videoUrl}
+            />
           </div>
         ))}
         {loading && (

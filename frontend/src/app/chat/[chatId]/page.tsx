@@ -9,6 +9,8 @@ import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useCodeStore } from "@/store/codeStore";
 import { fetchPromptStream } from "@/api/prompt";
+import { useAnimationStore } from "@/store/animationStore";
+import { useActiveTabStore } from "@/store/activeTabStore";
 
 export default function Chat() {
   const router = useRouter();
@@ -29,9 +31,13 @@ export default function Chat() {
   const setCode = useCodeStore((state) => state.setCode);
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
+  const setRequestId = useAnimationStore((state) => state.setRequestId);
+  const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
   useEffect(() => {
     setChatId(cid);
     setCode("");
+    setActiveTab("Code");
+    setRequestId("");
   }, [cid]);
 
   useEffect(() => {
@@ -49,6 +55,8 @@ export default function Chat() {
         setPrompt,
         setCode,
         setLoading,
+        setRequestId,
+        setActiveTab,
       });
     };
     fetchData();
@@ -74,6 +82,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (content?.messages) {
+      console.log(content?.messages);
       const formattedMessages = content.messages.map((msg: any) => ({
         role: msg.role,
         content: msg.content,

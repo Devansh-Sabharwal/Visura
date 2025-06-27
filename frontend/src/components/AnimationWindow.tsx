@@ -2,10 +2,14 @@ import { Tabs } from "./ui/Tabs";
 import CodeBlock from "./ui/CodeBlock";
 import VideoPlayer from "./ui/VideoPlayer";
 import { useCodeStore } from "@/store/codeStore";
+import { useAnimationPolling } from "@/hooks/useAnimationPolling";
+import { useAnimationStore } from "@/store/animationStore";
 
 export default function AnimationWindow() {
   const { code } = useCodeStore();
-
+  const requestId = useAnimationStore((state) => state.requestId);
+  const videoUrl = useAnimationStore((state) => state.videoUrl);
+  const { loading } = useAnimationPolling(requestId || "");
   const tabs = [
     {
       title: "Code",
@@ -20,8 +24,8 @@ export default function AnimationWindow() {
       title: "Animation",
       value: "Animation",
       content: (
-        <div className="h-full">
-          <VideoPlayer />
+        <div key={videoUrl} className="h-full">
+          <VideoPlayer loading={loading} url={videoUrl} />
         </div>
       ),
     },

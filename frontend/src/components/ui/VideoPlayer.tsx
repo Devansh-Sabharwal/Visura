@@ -3,10 +3,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 export default function VideoPlayer({
-  url = "https://res.cloudinary.com/dbyfsythn/video/upload/v1750603202/manim_videos/manim_videos/testing/62701215.mp4",
+  url,
+  loading,
 }: {
-  url?: string;
+  url: string;
+  loading: boolean;
 }) {
+  console.log(url);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
@@ -38,6 +41,8 @@ export default function VideoPlayer({
       setIsDownloading(false);
     }
   };
+  if (!url || !url.trim()) return <div>Waiting for Animation</div>;
+  if (loading) return <div>loading...</div>;
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -47,13 +52,7 @@ export default function VideoPlayer({
         autoPlay
         className="mt-4 w-full h-[500px]"
       >
-        <source
-          src={
-            url ||
-            "https://res.cloudinary.com/dbyfsythn/video/upload/v1750603202/manim_videos/manim_videos/testing/62701215.mp4"
-          }
-          type="video/mp4"
-        />
+        <source src={url} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
