@@ -92,7 +92,9 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
     user_id = req.state.user_id
     prompt = body.prompt
     chat_id = body.chatId
-
+    print(user_id)
+    print(prompt)
+    print(chat_id)
     request_id = uuid.uuid4().hex
     async def generate_stream():
         try:
@@ -254,6 +256,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             
             except Exception as e:
                 print(f"Error processing stream: {e}")
+                print(e)
                 yield f"data: {json.dumps({'type': 'error', 'text': str(e)})}\n\n"
             
             
@@ -265,15 +268,15 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             }
             content = json.dumps(data)
                         
-            new_message = Message(role="model", content=content,chatId=chat_id,video_id=request_id)
+            new_message = Message(role="model", content=content,chatId=chat_id)
             message = create_message(session, new_message)
             session.commit()
-
+            print(message.id)
             background_tasks.add_task(generate_video_background, code_text, chat_id,request_id,message.id)
 
         except Exception as e:
             session.rollback()
-            yield f"\n[Error: {str(e)}]".encode("utf-8")
+            print(e)
 
     return StreamingResponse(generate_stream(), media_type="text/plain")
 
@@ -281,6 +284,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
 def generate_video_background(code_text, chat_id,request_id,message_id):
     session = SessionLocal()
     try:
+        print("generate_video_background started")
         asyncio.run(generate_video_from_stream(code_text, chat_id, request_id,message_id,session))
     except Exception as e:
         

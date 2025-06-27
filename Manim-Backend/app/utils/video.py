@@ -129,6 +129,7 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
         session.add(video)
         session.commit()
         session.refresh(video)
+        print("video done")
         message = session.get(Message, message_id)
         if message:
             message.video_id = video.id

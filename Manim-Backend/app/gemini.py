@@ -37,7 +37,7 @@ self.wait(1)
 - ONLY use the delimiters `<<<EXPLANATION>>>` and `<<<CODE>>>`.
 - **Always emit both parts, even if the explanation is short.**
 - These delimiters are critical for chunked streaming on the backend.
-
+- If user sends casual text or any prompt for which there is no animation possible then create empty animation
 
 ### CHARACTER ENCODING RESTRICTIONS
 - **NEVER use any non-ASCII characters in the generated code**
