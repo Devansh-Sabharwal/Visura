@@ -43,17 +43,15 @@ export default function ChatBubble({ role, text, videoUrl }: Props) {
       <p className="whitespace-pre-wrap">
         {role == "user" ? text : explanation}
       </p>
-      {role == "model" &&
-        code.trim() != "" &&
-        (videoUrl || videoUrl?.trim()) && (
-          <div
-            onClick={handleAnimationClick}
-            className="flex items-center justify-between mt-1 bg-none px-3 py-2 border border-white/20 cursor-pointer rounded-lg"
-          >
-            <div className="text-xs p-1 border-white/30">View Animation</div>
-            <ChevronRight className="text-white/80" size={20} />
-          </div>
-        )}
+      {role == "model" && code.trim() != "" && videoUrl && videoUrl.trim() && (
+        <div
+          onClick={handleAnimationClick}
+          className="flex items-center justify-between mt-1 bg-none px-3 py-2 border border-white/20 cursor-pointer rounded-lg"
+        >
+          <div className="text-xs p-1 border-white/30">View Animation</div>
+          <ChevronRight className="text-white/80" size={20} />
+        </div>
+      )}
     </div>
   );
 }

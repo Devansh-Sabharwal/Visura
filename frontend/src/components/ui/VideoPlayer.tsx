@@ -1,6 +1,7 @@
 import { ArrowDown } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Loading } from "./LoadingScreen";
 
 export default function VideoPlayer({
   url,
@@ -9,7 +10,6 @@ export default function VideoPlayer({
   url: string;
   loading: boolean;
 }) {
-  console.log(url);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
@@ -41,8 +41,19 @@ export default function VideoPlayer({
       setIsDownloading(false);
     }
   };
-  if (!url || !url.trim()) return <div>Waiting for Animation</div>;
-  if (loading) return <div>loading...</div>;
+  if (loading)
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  if (!url?.trim()) {
+    return (
+      <div className="w-full h-full flex items-center justify-center text-lg">
+        <p className="flickering-text">Your Animation will render here</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col items-center">

@@ -6,7 +6,7 @@ import { useCodeStore } from "@/store/codeStore";
 import { usePromptStore } from "@/store/promptStore";
 import { fetchPromptStream } from "@/api/prompt";
 import { useSession } from "next-auth/react";
-import { BeatLoader } from "react-spinners";
+import { BeatLoader, SyncLoader } from "react-spinners";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
 

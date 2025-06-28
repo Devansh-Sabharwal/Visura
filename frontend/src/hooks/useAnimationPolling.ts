@@ -3,6 +3,7 @@ import { useAnimationStore } from "@/store/animationStore";
 import { useChatStore } from "@/store/chatStore";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const useAnimationPolling = (requestId: string) => {
   const { data } = useSession();
@@ -22,7 +23,7 @@ export const useAnimationPolling = (requestId: string) => {
 
     async function pollVideo() {
       let tries = 0;
-      const maxTries = 10;
+      const maxTries = 15;
 
       while (tries < maxTries && !isCancelled) {
         try {
@@ -60,8 +61,10 @@ export const useAnimationPolling = (requestId: string) => {
           console.error("Polling error:", e);
         }
 
-        await new Promise((res) => setTimeout(res, 4000)); // 4-second delay
+        await new Promise((res) => setTimeout(res, 3000)); // 4-second delay
         tries++;
+        if (tries == maxTries)
+          toast.error("Animation Not found Please Try Again");
       }
 
       if (!isCancelled) setLoading(false);
@@ -76,3 +79,8 @@ export const useAnimationPolling = (requestId: string) => {
 
   return { videoUrl, loading };
 };
+
+// todo //error handling at backend video gen error
+// redis celery setup
+//landing page,signup signin page , middleware,
+//history

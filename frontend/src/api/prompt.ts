@@ -1,4 +1,3 @@
-import { useActiveTabStore } from "@/store/activeTabStore";
 import { Message } from "@/types/message";
 import toast from "react-hot-toast";
 
