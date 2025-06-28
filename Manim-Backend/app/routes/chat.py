@@ -104,7 +104,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             current_type = "none"
             chat = session.exec(select(Chat).where(Chat.id == chat_id)).first()
             if not chat:
-                chat = Chat(id=chat_id, userId=user_id, title=f"{chat_id[:6]}")
+                chat = Chat(id=chat_id, userId=user_id, title=generateTitleFromPrompt(prompt))
                 session.add(chat)
                 session.commit()
 
@@ -292,3 +292,10 @@ def generate_video_background(code_text, chat_id,request_id,message_id):
 
     finally:
         session.close()
+
+def generateTitleFromPrompt(prompt):
+    words = prompt.split(" ")
+    title = " ".join(words[:8])
+    if len(words) > 8:
+        title += "..."
+    return title
