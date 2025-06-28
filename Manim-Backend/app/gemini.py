@@ -38,6 +38,9 @@ self.wait(1)
 - **Always emit both parts, even if the explanation is short.**
 - These delimiters are critical for chunked streaming on the backend.
 - If user sends casual text or any prompt for which there is no animation possible then create empty animation
+- Use only valid methods and arguments
+- Do not use about_edge or stretch= as keyword arguments inside .animate.
+-Use stretch(factor, dim=...) and scale(...).shift(...) combinations instead if needed. Ensure all transformation methods are compatible with .animate."
 
 ### CHARACTER ENCODING RESTRICTIONS
 - **NEVER use any non-ASCII characters in the generated code**
