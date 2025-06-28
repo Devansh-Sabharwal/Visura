@@ -60,6 +60,7 @@ async def get_all_chats(req:Request,session:Session=Depends(get_session)):
         }
         
     except SQLAlchemyError as e:
+        print(e)
         raise HTTPException(
             status_code=500,
             detail="Database error"
