@@ -23,7 +23,12 @@ export async function fetchPromptStream({
   setRequestId: (val: string) => void;
   setActiveTab: (val: string) => void;
 }) {
+  console.log("prompt: -", prompt);
   if (!prompt.trim()) return;
+  setMessages((prevMessages) => [
+    ...prevMessages,
+    { role: "user", content: prompt, timestamp: Date.now().toString() },
+  ]);
   setLoading(true);
   setMessages((prevMessages) => [
     ...prevMessages,

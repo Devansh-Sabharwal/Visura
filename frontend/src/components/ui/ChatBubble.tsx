@@ -38,7 +38,7 @@ export default function ChatBubble({ role, text, videoUrl }: Props) {
     <div
       className={`${
         role === "user" ? "bg-[#434343]" : "bg-none "
-      } text-white text-sm rounded-lg px-4 py-2 max-w-[90%] w-fit leading-6`}
+      } text-white text-sm rounded-lg px-4 py-2 max-w-[400px] overflow-auto custom-scrollbar w-fit leading-6`}
     >
       <p className="whitespace-pre-wrap">
         {role == "user" ? text : explanation}

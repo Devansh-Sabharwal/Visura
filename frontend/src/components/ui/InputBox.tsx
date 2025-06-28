@@ -34,7 +34,7 @@ export default function InputBox({
         value={prompt}
         rows={1}
         placeholder="Enter a prompt to visualize your idea"
-        className="pr-12 flex-1 resize-none bg-transparent text-white placeholder-white/50 outline-none border-none text-base
+        className="pr-12  flex-1 resize-none bg-transparent text-white placeholder-white/50 outline-none border-none text-base
         custom-scrollbar"
       />
       {!className && (

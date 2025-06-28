@@ -6,7 +6,7 @@ import { useCodeStore } from "@/store/codeStore";
 import { usePromptStore } from "@/store/promptStore";
 import { fetchPromptStream } from "@/api/prompt";
 import { useSession } from "next-auth/react";
-import { BeatLoader, SyncLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
 
@@ -26,16 +26,8 @@ export default function ChatWindow() {
 
   const handleSubmit = () => {
     if (prompt.trim() == "") return;
-    const newMessages = [
-      ...messages,
-      { role: "user", content: prompt, timestamp: Date.now().toString() },
-    ];
-    setMessages(newMessages);
-    setLoading(true);
-    const temp = prompt;
-    setPrompt("");
     fetchPromptStream({
-      prompt: temp,
+      prompt,
       chatId: chatId || "",
       token: data?.fastApiToken!,
       messages,
@@ -46,6 +38,7 @@ export default function ChatWindow() {
       setRequestId,
       setActiveTab,
     });
+    setPrompt("");
   };
   useEffect(() => {
     if (messagesEndRef.current) {

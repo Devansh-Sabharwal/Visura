@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
+const waitingMessages = [
+  "Loading",
+  "Preparing",
+  "Almost ready",
+  "Just a moment",
+];
+
 export function Loading() {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [dots, setDots] = useState("");
-
-  const waitingMessages = [
-    "Loading",
-    "Preparing",
-    "Almost ready",
-    "Just a moment",
-  ];
-
   // Cycle through waiting messages
   useEffect(() => {
     const messageInterval = setInterval(() => {

@@ -1,11 +1,23 @@
+import { ChatHistory } from "@/types/chatHistory";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 interface SidebarProps {
   translate?: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  history: ChatHistory[];
 }
-export default function Sidebar({ open, setOpen, translate }: SidebarProps) {
+export default function Sidebar({
+  open,
+  setOpen,
+  translate,
+  history,
+}: SidebarProps) {
+  const router = useRouter();
+  const handleClick = (chatId: string) => {
+    window.location.href = `/chat/${chatId}`;
+  };
   const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -38,12 +50,25 @@ export default function Sidebar({ open, setOpen, translate }: SidebarProps) {
           }}
         />
       </div>
-      <div className="text-sm bg-button-bg hover:scale-105 transition-all duration-500 cursor-pointer py-2 px-4 rounded-lg flex items-center gap-2 mt-4">
+      <div
+        onClick={() => {
+          router.push("/chat");
+        }}
+        className="text-sm bg-button-bg hover:scale-105 transition-all duration-500 cursor-pointer py-2 px-4 rounded-lg flex items-center gap-2 mt-4"
+      >
         Create New Chat
       </div>
       <div className="mt-12 text-white/70">Recent chats</div>
-      <div className="overflow-auto max-h-[calc(100vh-250px)] pr-2 custom-scrollbar">
-        {/* map kro yaha */}
+      <div className="overflow-auto max-h-[calc(100vh-250px)] py-2 custom-scrollbar">
+        {history.map((element, index) => (
+          <div
+            onClick={() => handleClick(element.chatId)}
+            key={index}
+            className="rounded-lg hover:bg-[#383838] cursor-pointer px-2 py-1 text-base text-white/60 my-2"
+          >
+            {element.title}
+          </div>
+        ))}
       </div>
     </div>
   );

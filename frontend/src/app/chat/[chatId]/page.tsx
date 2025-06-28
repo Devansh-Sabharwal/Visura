@@ -16,7 +16,7 @@ export default function Chat() {
   const router = useRouter();
   const params = useParams();
   const cid = params.chatId as string;
-  const { data } = useSession();
+  const { data, status } = useSession();
   const {
     data: content,
     isPending,
@@ -34,6 +34,7 @@ export default function Chat() {
   const setRequestId = useAnimationStore((state) => state.setRequestId);
   const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
   useEffect(() => {
+    setMessages((prev) => []);
     setChatId(cid);
     setCode("");
     setActiveTab("Code");
@@ -41,6 +42,7 @@ export default function Chat() {
   }, [cid]);
 
   useEffect(() => {
+    if (status == "loading") return;
     if (!prompt.trim()) {
       refetch();
       return;
@@ -60,7 +62,7 @@ export default function Chat() {
       });
     };
     fetchData();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     if (isError) {

@@ -1,34 +1,59 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputBox from "./ui/InputBox";
 import { usePromptStore } from "@/store/promptStore";
 import Suggestion from "./ui/Suggestion";
 import { Sidebar } from "lucide-react";
 import SidebarComponent from "./Sidebar";
-import { useChatStore } from "@/store/chatStore";
 import { v4 as uuidv4 } from "uuid";
+import { useChatHistoryStore } from "@/store/chatHistoryStore";
+import { getHistory } from "@/api/history";
+import { signOut, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 export default function NewChat() {
+  const { data, status } = useSession();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const prompt = usePromptStore((state) => state.prompt);
   const setPrompt = usePromptStore((state) => state.setPrompt);
-  const setMessages = useChatStore((state) => state.setMessages);
+  const history = useChatHistoryStore((state) => state.history);
+  const setHisory = useChatHistoryStore((state) => state.setHistory);
   const onSubmit = () => {
     if (prompt?.trim() == "") return;
-    const newMessages = [
-      { role: "user", content: prompt, timestamp: Date.now().toString() },
-    ];
-    setMessages(newMessages);
     const chatId = uuidv4();
     // router.push(`/chat/${chatId}`);
-    console.log("onSubmit called");
+    console.log("onSubmit called", prompt);
     router.push(`/chat/test-frontend`);
   };
   //fetch history
+  useEffect(() => {
+    if (status == "loading") return;
+    const fetchHistory = async () => {
+      try {
+        const history = await getHistory(data?.fastApiToken || "");
+        setHisory(history.chats);
+      } catch (e: any) {
+        if (e.message === "Unauthorized") {
+          toast.error("Session expired. Please sign in again.", {
+            position: "top-center",
+          });
+          setTimeout(() => {
+            router.push("/auth/signin");
+          }, 3000);
+        }
+      }
+    };
+    fetchHistory();
+  }, [status]);
   return (
     <div className="h-screen w-screen angular-gradient overflow-auto px-4 sm:px-4">
-      <SidebarComponent translate={"0"} open={open} setOpen={setOpen} />
+      <SidebarComponent
+        history={history}
+        translate={"0"}
+        open={open}
+        setOpen={setOpen}
+      />
 
       <div className="h-fit px-2 sm:px-4 py-8 flex justify-between">
         <div className="flex px-2 sm:px-6 items-center">
@@ -41,7 +66,19 @@ export default function NewChat() {
             <img src="/logo2.svg" alt="Logo" className="h-6 sm:h-[40px]" />
           </div>
         </div>
-        <button className="mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60">
+        <button
+          onClick={() => {
+            const handleLogout = async () => {
+              await signOut({
+                callbackUrl: "/auth/signin", // Optional: redirect after logout
+              });
+            };
+
+            if (!data) return null;
+            handleLogout();
+          }}
+          className="mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
+        >
           Logout
         </button>
       </div>
@@ -72,8 +109,16 @@ export default function NewChat() {
         <Suggestion text="Draw a flowchart of water cycle" />
       </div>
       <div className="absolute bottom-4 left-2">
-        <span onClick={() => setOpen(true)} title="Open Sidebar">
-          <Sidebar className="text-white/50 cursor-pointer" />
+        <span title="Open Sidebar">
+          {!open && (
+            <Sidebar
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen((prev) => !prev);
+              }}
+              className="text-white/50 cursor-pointer"
+            />
+          )}
         </span>
       </div>
     </div>
