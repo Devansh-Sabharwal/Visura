@@ -48,18 +48,27 @@ export default function Chat() {
       return;
     }
     const fetchData = async () => {
-      await fetchPromptStream({
-        prompt,
-        chatId: cid,
-        token: data?.fastApiToken!,
-        messages,
-        setMessages,
-        setPrompt,
-        setCode,
-        setLoading,
-        setRequestId,
-        setActiveTab,
-      });
+      try {
+        await fetchPromptStream({
+          prompt,
+          chatId: cid,
+          token: data?.fastApiToken!,
+          messages,
+          setMessages,
+          setPrompt,
+          setCode,
+          setLoading,
+          setRequestId,
+          setActiveTab,
+        });
+      } catch (e: any) {
+        if (e.message == "Unauthorized") {
+          toast.error("Session expired. Please sign in again.");
+          setTimeout(() => {
+            router.push("/auth/signin");
+          }, 1500);
+        }
+      }
     };
     fetchData();
   }, [status]);

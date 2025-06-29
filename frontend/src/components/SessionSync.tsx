@@ -9,7 +9,6 @@ export function SessionSync() {
   useEffect(() => {
     setLoading(status === "loading");
     setSession(session);
-    console.log(session);
   }, [session, status, setSession, setLoading]);
 
   return null;

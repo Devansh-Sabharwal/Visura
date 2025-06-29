@@ -10,8 +10,11 @@ import { BeatLoader } from "react-spinners";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
 import { useSessionStore } from "@/store/sessionStore";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function ChatWindow() {
+  const router = useRouter();
   const { fastApiToken } = useSessionStore();
   const chatId = useChatStore((state) => state.chatId);
   const messages = useChatStore((state) => state.messages);
@@ -25,21 +28,30 @@ export default function ChatWindow() {
   const setRequestId = useAnimationStore((state) => state.setRequestId);
   const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (prompt.trim() == "") return;
-    fetchPromptStream({
-      prompt,
-      chatId: chatId || "",
-      token: fastApiToken || "",
-      messages,
-      setMessages,
-      setPrompt,
-      setCode,
-      setLoading,
-      setRequestId,
-      setActiveTab,
-    });
-    setPrompt("");
+    try {
+      await fetchPromptStream({
+        prompt,
+        chatId: chatId || "",
+        token: fastApiToken || "",
+        messages,
+        setMessages,
+        setPrompt,
+        setCode,
+        setLoading,
+        setRequestId,
+        setActiveTab,
+      });
+      setPrompt("");
+    } catch (e: any) {
+      if (e.message == "Unauthorized") {
+        toast.error("Session expired. Please sign in again.");
+        setTimeout(() => {
+          router.push("/auth/signin");
+        }, 1500);
+      }
+    }
   };
   useEffect(() => {
     if (messagesEndRef.current) {

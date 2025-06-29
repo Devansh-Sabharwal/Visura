@@ -1,4 +1,5 @@
 import { Message } from "@/types/message";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export async function fetchPromptStream({
@@ -23,7 +24,6 @@ export async function fetchPromptStream({
   setRequestId: (val: string) => void;
   setActiveTab: (val: string) => void;
 }) {
-  console.log("prompt: -", prompt);
   if (!prompt.trim()) return;
   setMessages((prevMessages) => [
     ...prevMessages,
@@ -49,17 +49,20 @@ export async function fetchPromptStream({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token} `,
         },
         body: JSON.stringify({ prompt, chatId }),
       }
     );
-
+    if (!res.ok) {
+      if (res.status == 400) throw new Error("Chat not found");
+      if (res.status == 500) throw new Error("Internet Error");
+      if (res.status == 401) throw new Error("Unauthorized");
+    }
     if (!res.body) {
       setLoading(false);
       return;
     }
-
     setPrompt("");
     const reader = res.body.getReader();
     const decoder = new TextDecoder("utf-8");
@@ -117,8 +120,15 @@ export async function fetchPromptStream({
         }
       }
     }
-  } catch (error) {
-    toast.error("Streaming error:");
+  } catch (error: any) {
     setLoading(false);
+
+    if (error.message == "Unauthorized") {
+      throw new Error("Unauthorized");
+    } else if (error.message == "Internet Error") {
+      toast.error("Server Error Please Try Again");
+    } else {
+      toast.error("Streaming Error Please Try Again");
+    }
   }
 }
