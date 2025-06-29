@@ -17,7 +17,6 @@ export default function ChatBubble({ role, text, videoUrl }: Props) {
   let code: string = "";
 
   const handleAnimationClick = () => {
-    console.log(videoUrl);
     setActiveTab("Animation");
     setCode(code.trim());
     setVideoUrl(videoUrl || "");

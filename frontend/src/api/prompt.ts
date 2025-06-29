@@ -130,7 +130,7 @@ export async function fetchPromptStream({
     } else if (error.message == "Internet Error") {
       toast.error("Server Error Please Try Again");
     } else {
-      toast.error("Streaming Error Please Try Again");
+      toast.error("Streaming error:", error.message);
     }
   }
 }

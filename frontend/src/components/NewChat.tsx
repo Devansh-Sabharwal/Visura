@@ -11,11 +11,13 @@ import { useChatHistoryStore } from "@/store/chatHistoryStore";
 import { getHistory } from "@/api/history";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { useIsMobile } from "@/store/isMobileStore";
 export default function NewChat() {
   const { data, status } = useSession();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const prompt = usePromptStore((state) => state.prompt);
+  const setIsMobile = useIsMobile((state) => state.setIsMobile);
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const history = useChatHistoryStore((state) => state.history);
   const setHisory = useChatHistoryStore((state) => state.setHistory);
@@ -46,8 +48,18 @@ export default function NewChat() {
     };
     fetchHistory();
   }, [status]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   return (
-    <div className="h-screen w-screen angular-gradient overflow-auto px-4 sm:px-4">
+    <div className="h-screen w-screen angular-gradient overflow-hidden px-4 sm:px-4">
       <SidebarComponent
         history={history}
         translate={"0"}
@@ -55,8 +67,8 @@ export default function NewChat() {
         setOpen={setOpen}
       />
 
-      <div className="h-fit px-2 sm:px-4 py-8 flex justify-between">
-        <div className="flex px-2 sm:px-6 items-center">
+      <div className="h-fit sm:px-4 py-4 sm:py-8 flex justify-between">
+        <div className="flex sm:px-6 items-center">
           <div
             onClick={() => {
               router.push("/");
@@ -82,12 +94,12 @@ export default function NewChat() {
           Logout
         </button>
       </div>
-      <div className="w-full flex justify-center text-center mt-20 sm:mt-44">
+      <div className="w-full flex justify-center text-center mt-32 sm:mt-44">
         <div>
           <div className="font-inter  font-semibold tracking-[-0.08em] text-3xl sm:text-[44px]">
             What would you like to animate?
           </div>
-          <div className="mt-1.5 font-normal text-center font-sans tracking-[-0.03em] text-base sm:text-xl text-[#CBCBCB]">
+          <div className="mt-1.5 font-normal text-center font-sans tracking-[-0.04em] text-base sm:text-xl text-[#CBCBCB]">
             Create stunning 2D animations by chatting with AI.
           </div>
           <div className="mt-8 flex justify-center">
@@ -96,7 +108,8 @@ export default function NewChat() {
               prompt={prompt}
               setPrompt={setPrompt}
               onSubmit={onSubmit}
-              className="bg-[#9C9999]/10 border w-[360px] sm:w-md flex border-white/20 rounded-lg h-32 justify-end p-4"
+              buttonClassName="sm:hidden bg-[#3A5761]"
+              className="bg-[#9C9999]/10 border w-[340px] sm:w-md flex border-white/20 rounded-lg h-32 justify-end p-4"
             />
           </div>
         </div>

@@ -13,7 +13,7 @@ export default function Navbar() {
           }}
           className="hover:cursor-pointer"
         >
-          <img src="/logo2.svg" alt="Logo" className="h-[30px]" />
+          <img src="/logo2.svg" alt="Logo" className="h-[24px] sm:h-[30px]" />
         </div>
         <button
           onClick={() => {
@@ -25,7 +25,7 @@ export default function Navbar() {
 
             handleLogout();
           }}
-          className="mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
+          className="text-xs sm:text-base mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
         >
           Logout
         </button>

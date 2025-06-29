@@ -15,7 +15,7 @@ export default function AnimationWindow() {
       title: "Code",
       value: "Code",
       content: (
-        <div className="h-full">
+        <div className="h-full sm:w-full w-[calc(100vw-50px)]">
           <CodeBlock code={code || ""} language="python" />
         </div>
       ),

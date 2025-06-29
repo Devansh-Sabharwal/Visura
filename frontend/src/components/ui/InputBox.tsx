@@ -5,14 +5,18 @@ interface InputProps {
   onSubmit?: () => void;
   prompt: string;
   className?: string;
+  buttonClassName?: string;
   disabled: boolean;
+  showButton?: boolean;
 }
 export default function InputBox({
   prompt,
   setPrompt,
   onSubmit = () => {},
   className,
+  buttonClassName,
   disabled,
+  showButton = true,
 }: InputProps) {
   return (
     <div
@@ -37,10 +41,12 @@ export default function InputBox({
         className="pr-12  flex-1 resize-none bg-transparent text-white placeholder-white/50 outline-none border-none text-base
         custom-scrollbar"
       />
-      {!className && (
+      {showButton && (
         <button
           onClick={onSubmit}
-          className="cursor-pointer flex justify-center items-center bg-[#3b3b3b] rounded-full h-10 w-10 hover:bg-[#4b4b4b] transition"
+          className={`cursor-pointer flex justify-center items-center ${
+            buttonClassName ? buttonClassName : "bg-[#3b3b3b]"
+          }  rounded-full h-10 w-10 hover:bg-[#4b4b4b] transition`}
         >
           <ArrowUp size={20} />
         </button>

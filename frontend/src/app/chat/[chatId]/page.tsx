@@ -33,11 +33,15 @@ export default function Chat() {
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const setRequestId = useAnimationStore((state) => state.setRequestId);
   const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
+  const setMobileActiveTab = useActiveTabStore(
+    (state) => state.setMobileActiveTab
+  );
   useEffect(() => {
     setMessages((prev) => []);
     setChatId(cid);
     setCode("");
     setActiveTab("Code");
+    setMobileActiveTab("Chat");
     setRequestId("");
   }, [cid]);
 
@@ -93,7 +97,6 @@ export default function Chat() {
 
   useEffect(() => {
     if (content?.messages) {
-      console.log(content?.messages);
       const formattedMessages = content.messages.map((msg: any) => ({
         role: msg.role,
         content: msg.content,

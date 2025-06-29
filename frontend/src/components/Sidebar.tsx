@@ -54,7 +54,7 @@ export default function Sidebar({
         onClick={() => {
           router.push("/chat");
         }}
-        className="text-sm bg-button-bg hover:scale-105 transition-all duration-500 cursor-pointer py-2 px-4 rounded-lg flex items-center gap-2 mt-4"
+        className="text-sm sm:text-sm bg-button-bg hover:scale-105 transition-all duration-500 cursor-pointer py-2 px-4 rounded-lg flex items-center gap-2 mt-4"
       >
         Create New Chat
       </div>
@@ -64,7 +64,7 @@ export default function Sidebar({
           <div
             onClick={() => handleClick(element.chatId)}
             key={index}
-            className="rounded-lg hover:bg-[#383838] cursor-pointer px-2 py-1 text-base text-white/60 my-2"
+            className="text-base sm:text-base rounded-lg hover:bg-[#383838] cursor-pointer px-2 py-1 text-white/60 my-2"
           >
             {element.title}
           </div>

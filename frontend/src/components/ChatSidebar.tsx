@@ -1,4 +1,10 @@
-import { Plus, Sidebar } from "lucide-react";
+import {
+  Clapperboard,
+  MessageCirclePlus,
+  MessageSquareText,
+  Plus,
+  Sidebar,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import SidebarComponent from "./Sidebar";
 import { useRouter } from "next/navigation";
@@ -6,12 +12,19 @@ import { useChatHistoryStore } from "@/store/chatHistoryStore";
 import { useSession } from "next-auth/react";
 import { getHistory } from "@/api/history";
 import toast from "react-hot-toast";
+import { useIsMobile } from "@/store/isMobileStore";
+import { useActiveTabStore } from "@/store/activeTabStore";
 export default function ChatSidebar() {
+  const isMobile = useIsMobile((state) => state.isMobile);
   const { data, status } = useSession();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const history = useChatHistoryStore((state) => state.history);
   const setHisory = useChatHistoryStore((state) => state.setHistory);
+  const setMobileActiveTab = useActiveTabStore(
+    (state) => state.setMobileActiveTab
+  );
+  const mobileActiveTab = useActiveTabStore((state) => state.mobileActiveTab);
   useEffect(() => {
     if (status == "loading") return;
     const fetchHistory = async () => {
@@ -32,17 +45,42 @@ export default function ChatSidebar() {
     fetchHistory();
   }, [status]);
   return (
-    <div className="relative w-12 h-full border-r border-white/5 flex p-2 pt-0 items-center flex-col gap-6">
+    <div className="relative w-12 h-full border-r border-white/5 flex  pt-0 items-center flex-col gap-6">
       <span onClick={() => setOpen(true)} title="Open Sidebar" className="mt-4">
-        <Sidebar className="text-white/50 cursor-pointer" />
+        <Sidebar
+          size={isMobile ? 20 : 24}
+          className="text-white/70 cursor-pointer"
+        />
       </span>
 
       <span onClick={() => router.push("/chat")} title="New Chat">
-        <Plus
-          size={26}
-          className="hover:bg-button-bg hover:scale-105 transition-all duration-500 cursor-pointer rounded-full bg-[#4a4a4a] p-1"
+        <MessageCirclePlus
+          size={isMobile ? 20 : 24}
+          className="text-white/70 cursor-pointer"
         />
       </span>
+      {isMobile && (
+        <span
+          title="Chat"
+          className={`${
+            mobileActiveTab == "Chat" ? "bg-button-bg" : ""
+          } w-full py-2 flex justify-center text-white/70 `}
+          onClick={() => setMobileActiveTab("Chat")}
+        >
+          <MessageSquareText size={isMobile ? 20 : 24} />
+        </span>
+      )}
+      {isMobile && (
+        <span
+          title="Animation"
+          className={`${
+            mobileActiveTab == "Animation" ? "bg-button-bg" : ""
+          } w-full py-2 flex justify-center text-white/70 `}
+          onClick={() => setMobileActiveTab("Animation")}
+        >
+          <Clapperboard size={isMobile ? 20 : 24} />
+        </span>
+      )}
       <SidebarComponent history={history} open={open} setOpen={setOpen} />
     </div>
   );

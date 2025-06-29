@@ -11,7 +11,6 @@ export const useAnimationStore = create<Animation>((set) => ({
   requestId: undefined,
   videoUrl: "",
   setVideoUrl: (videoUrl) => {
-    console.log("video Url set", videoUrl);
     set({ videoUrl });
   },
   setRequestId: (requestId) => {

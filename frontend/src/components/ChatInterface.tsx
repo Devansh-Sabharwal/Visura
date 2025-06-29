@@ -2,8 +2,17 @@ import ChatWindow from "./ChatWindow";
 import AnimationWindow from "./AnimationWindow";
 import ChatSidebar from "./ChatSidebar";
 import Navbar from "./Navbar";
+import { useIsMobile } from "@/store/isMobileStore";
+import MobileChatInterface from "./MobileChatInterface";
 
 export default function ChatInterface() {
+  const isMobile = useIsMobile((state) => state.isMobile);
+  if (isMobile)
+    return (
+      <>
+        <MobileChatInterface />
+      </>
+    );
   return (
     <div className="flex flex-col h-screen font-inter tracking-wide">
       <div>
