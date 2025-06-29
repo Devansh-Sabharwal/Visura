@@ -9,9 +9,10 @@ import { useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
+import { useSessionStore } from "@/store/sessionStore";
 
 export default function ChatWindow() {
-  const { data } = useSession();
+  const { fastApiToken } = useSessionStore();
   const chatId = useChatStore((state) => state.chatId);
   const messages = useChatStore((state) => state.messages);
   const setMessages = useChatStore((state) => state.setMessages);
@@ -29,7 +30,7 @@ export default function ChatWindow() {
     fetchPromptStream({
       prompt,
       chatId: chatId || "",
-      token: data?.fastApiToken!,
+      token: fastApiToken || "",
       messages,
       setMessages,
       setPrompt,

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export const useAnimationPolling = (requestId: string) => {
-  const { data } = useSession();
+  const { data, status } = useSession();
   const videoUrl = useAnimationStore((state) => state.videoUrl);
   const setVideoUrl = useAnimationStore((state) => state.setVideoUrl);
   const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
@@ -14,6 +14,7 @@ export const useAnimationPolling = (requestId: string) => {
   const [loading, setLoading] = useState(true);
   const setMessages = useChatStore((state) => state.setMessages);
   useEffect(() => {
+    if (status == "loading") return;
     if (!requestId || !requestId.trim()) {
       setLoading(false); // prevent indefinite loading state
       return;
@@ -75,12 +76,13 @@ export const useAnimationPolling = (requestId: string) => {
     return () => {
       isCancelled = true;
     };
-  }, [chatId, requestId]);
+  }, [chatId, requestId, status]);
 
   return { videoUrl, loading };
 };
 
-// todo //error handling at backend video gen error
+// todo:-
+// error handling at backend for video gen error
 // redis celery setup
-//landing page,signup signin page
-//save session in zustand store
+// landing page,signup signin page
+// save session in zustand store

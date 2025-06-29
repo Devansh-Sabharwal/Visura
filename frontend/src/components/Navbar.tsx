@@ -1,3 +1,4 @@
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -5,7 +6,7 @@ export default function Navbar() {
   const router = useRouter();
   return (
     <div className="h-[56px] border-b border-white/10">
-      <div className="h-full flex p-4 items-center">
+      <div className="h-full flex p-4 items-center justify-between">
         <div
           onClick={() => {
             router.push("/");
@@ -14,6 +15,20 @@ export default function Navbar() {
         >
           <img src="/logo2.svg" alt="Logo" className="h-[30px]" />
         </div>
+        <button
+          onClick={() => {
+            const handleLogout = async () => {
+              await signOut({
+                callbackUrl: "/auth/signin", // Optional: redirect after logout
+              });
+            };
+
+            handleLogout();
+          }}
+          className="mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
