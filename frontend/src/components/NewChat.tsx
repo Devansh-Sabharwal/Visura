@@ -21,6 +21,13 @@ export default function NewChat() {
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const history = useChatHistoryStore((state) => state.history);
   const setHisory = useChatHistoryStore((state) => state.setHistory);
+  const suggestions = [
+    "Animate the fibonacci spiral being built block by block",
+    "Proof pythogoras theorem",
+    "Explain black holes through animations",
+    "Make a geometric design animation",
+    "Animate bubble sort sorting algorithm",
+  ];
   const onSubmit = () => {
     if (prompt?.trim() == "") return;
     const chatId = uuidv4();
@@ -89,17 +96,17 @@ export default function NewChat() {
             if (!data) return null;
             handleLogout();
           }}
-          className="mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
+          className="mr-2 hover:scale-110 text-sm sm:text-base transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
         >
           Logout
         </button>
       </div>
-      <div className="w-full flex justify-center text-center mt-32 sm:mt-44">
+      <div className="w-full flex justify-center text-center mt-40 sm:mt-44">
         <div>
-          <div className="font-inter  font-semibold tracking-[-0.08em] text-3xl sm:text-[44px]">
+          <div className="font-inter  font-semibold tracking-[-0.08em] text-4xl sm:text-[44px]">
             What would you like to animate?
           </div>
-          <div className="mt-1.5 font-normal text-center font-sans tracking-[-0.04em] text-base sm:text-xl text-[#CBCBCB]">
+          <div className="mt-2.5 sm:mt-1.5 font-normal text-center font-sans tracking-[-0.04em] text-base sm:text-xl text-[#CBCBCB]">
             Create stunning 2D animations by chatting with AI.
           </div>
           <div className="mt-8 flex justify-center">
@@ -114,14 +121,20 @@ export default function NewChat() {
           </div>
         </div>
       </div>
-      <div className="max-w-2xl mt-20 flex justify-center mx-auto flex-wrap">
-        <Suggestion text="Animate the fibonacci spiral being built block by block" />
-        <Suggestion text="Proof pythogoras theorem" />
-        <Suggestion text="Explain black holes through animations" />
-        <Suggestion text="Make a geometric design animation" />
-        <Suggestion text="Draw a flowchart of water cycle" />
+      <div className="hidden sm:flex max-w-2xl mt-20 justify-center mx-auto flex-wrap">
+        {suggestions.map((text, index) => (
+          <div
+            key={index}
+            onClick={() => {
+              setPrompt(text);
+              router.push(`/chat/test-frontend`);
+            }}
+          >
+            <Suggestion text={text} />
+          </div>
+        ))}
       </div>
-      <div className="absolute bottom-4 left-2">
+      <div className="fixed bottom-4 left-2">
         <span title="Open Sidebar">
           {!open && (
             <Sidebar

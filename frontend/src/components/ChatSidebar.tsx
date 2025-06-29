@@ -45,7 +45,7 @@ export default function ChatSidebar() {
     fetchHistory();
   }, [status]);
   return (
-    <div className="relative w-12 h-full border-r border-white/5 flex  pt-0 items-center flex-col gap-6">
+    <div className="relative w-8 sm:w-12 h-full sm:border-r border-white/5 flex  pt-0 items-center flex-col gap-6 ">
       <span onClick={() => setOpen(true)} title="Open Sidebar" className="mt-4">
         <Sidebar
           size={isMobile ? 20 : 24}

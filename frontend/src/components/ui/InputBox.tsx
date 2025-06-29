@@ -23,7 +23,7 @@ export default function InputBox({
       className={`${
         className
           ? className
-          : "bg-[#171717] flex w-full h-28 border border-white/20 rounded-xl gap-2 p-4"
+          : "bg-[#171717] flex w-full h-36 sm:h-28 border border-white/20 rounded-md gap-2 p-4"
       }`}
     >
       <textarea
@@ -38,7 +38,7 @@ export default function InputBox({
         value={prompt}
         rows={1}
         placeholder="Enter a prompt to visualize your idea"
-        className="pr-12  flex-1 resize-none bg-transparent text-white placeholder-white/50 outline-none border-none text-base
+        className="pr-12  flex-1 resize-none bg-transparent text-white placeholder-white/50 outline-none border-none text-sm
         custom-scrollbar"
       />
       {showButton && (

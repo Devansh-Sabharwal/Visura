@@ -18,7 +18,7 @@ export default function MobileChatInterface() {
             <ChatSidebar />
           </div>
           {mobileActiveTab == "Chat" && (
-            <div className="bg-black-100 h-full max-w-[calc(100vw-60px)] w-full">
+            <div className="bg-black-100 h-full max-w-[calc(100vw-40px)] w-full">
               <ChatWindow />
             </div>
           )}

@@ -84,7 +84,7 @@ export default function ChatWindow() {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="mx-2">
+      <div className="mx-1 sm:mx-2">
         <Input
           disabled={loading}
           prompt={prompt}
