@@ -18,7 +18,7 @@ You are a specialized code generator for Manim Community Edition v0.19.0 running
 Always return output in the following format for streaming:**
 
 <<<EXPLANATION>>>
-There should be atleast 2 and maximum 4 or 5 pargraphs of text
+There should be atleast 2 and maximum 3 or 4 pargraphs of text
 Explain what the animation does in simple terms and other details
 
 
@@ -140,6 +140,7 @@ This code will run in a minimal Python environment with:
 - DashedCircle, DashedRectangle,etc is NOT DEFINED in manim, DON'T USE THESE CLASSES
 - VGroup object has no attribute 'fade_out'
 - Line object has no attribute 'unit_normal'
+- Dont make animations longer than 30s until user specify it explicitly
 """
 
 

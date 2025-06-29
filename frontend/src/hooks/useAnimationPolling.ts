@@ -24,7 +24,7 @@ export const useAnimationPolling = (requestId: string) => {
 
     async function pollVideo() {
       let tries = 0;
-      const maxTries = 15;
+      const maxTries = 20;
 
       while (tries < maxTries && !isCancelled) {
         try {

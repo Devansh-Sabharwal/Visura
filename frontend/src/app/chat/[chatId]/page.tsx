@@ -11,6 +11,7 @@ import { useCodeStore } from "@/store/codeStore";
 import { fetchPromptStream } from "@/api/prompt";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
+import { useIsMobile } from "@/store/isMobileStore";
 
 export default function Chat() {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function Chat() {
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const setRequestId = useAnimationStore((state) => state.setRequestId);
   const setActiveTab = useActiveTabStore((state) => state.setActiveTab);
+  const setIsMobile = useIsMobile((state) => state.setIsMobile);
   const setMobileActiveTab = useActiveTabStore(
     (state) => state.setMobileActiveTab
   );
@@ -109,6 +111,16 @@ export default function Chat() {
   useEffect(() => {
     setLoading(isPending);
   }, [isPending]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   return (
     <div>
       <ChatInterface />

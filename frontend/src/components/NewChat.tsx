@@ -59,7 +59,7 @@ export default function NewChat() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
   return (
-    <div className="h-screen w-screen angular-gradient overflow-hidden px-4 sm:px-4">
+    <div className="h-screen w-screen angular-gradient overflow-auto px-4 sm:px-4">
       <SidebarComponent
         history={history}
         translate={"0"}
@@ -115,7 +115,7 @@ export default function NewChat() {
         </div>
       </div>
       <div className="max-w-2xl mt-20 flex justify-center mx-auto flex-wrap">
-        <Suggestion text="Draw a geometric design" />
+        <Suggestion text="Animate the fibonacci spiral being built block by block" />
         <Suggestion text="Proof pythogoras theorem" />
         <Suggestion text="Explain black holes through animations" />
         <Suggestion text="Make a geometric design animation" />
