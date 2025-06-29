@@ -276,8 +276,8 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
 
         except Exception as e:
             session.rollback()
-            raise HTTPException(status_code=500, detail="Database Error")
-
+            yield f"data: {json.dumps({'type': 'error', 'text': 'Database Error'})}\n\n"
+            return
     return StreamingResponse(generate_stream(), media_type="text/plain")
 
 

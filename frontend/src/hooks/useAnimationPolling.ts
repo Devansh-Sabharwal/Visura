@@ -85,4 +85,3 @@ export const useAnimationPolling = (requestId: string) => {
 // error handling at backend for video gen error
 // redis celery setup
 // landing page,signup signin page
-// save session in zustand store

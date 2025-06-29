@@ -49,7 +49,7 @@ export async function fetchPromptStream({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `Bearer ${token} `,
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ prompt, chatId }),
       }
@@ -100,6 +100,8 @@ export async function fetchPromptStream({
           } else if (payload.type === "done") {
             setRequestId(payload.request_id);
             setActiveTab("Animation");
+          } else if (payload.type == "error") {
+            toast.error("Server Error Please Try Again");
           }
 
           setMessages((prevMessages) => {
