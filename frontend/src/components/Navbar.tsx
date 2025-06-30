@@ -25,7 +25,7 @@ export default function Navbar() {
 
             handleLogout();
           }}
-          className="text-xs sm:text-base mr-2 hover:scale-110 transition-all duration-500 px-3 py-1 rounded-lg cursor-pointer border border-white/60"
+          className="text-xs sm:text-base mr-2 hover:scale-110 transition-all duration-500 px-3 py-2 rounded-lg cursor-pointer border border-white/60"
         >
           Logout
         </button>

@@ -69,7 +69,7 @@ export default function NewChat() {
     <div className="h-screen w-screen angular-gradient overflow-auto px-4 sm:px-4">
       <SidebarComponent
         history={history}
-        translate={"0"}
+        translate={"-translate-x-4"}
         open={open}
         setOpen={setOpen}
       />
