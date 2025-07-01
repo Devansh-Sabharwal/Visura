@@ -36,7 +36,7 @@ export default function ChatSidebar() {
             position: "top-center",
           });
           setTimeout(() => {
-            router.push("/auth/signin");
+            router.push("/signin");
           }, 3000);
         }
       }

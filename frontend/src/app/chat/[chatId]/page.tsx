@@ -71,7 +71,7 @@ export default function Chat() {
         if (e.message == "Unauthorized") {
           toast.error("Session expired. Please sign in again.");
           setTimeout(() => {
-            router.push("/auth/signin");
+            router.push("/signin");
           }, 1500);
         }
       }
@@ -84,7 +84,7 @@ export default function Chat() {
       if (error instanceof Error && error.message === "Unauthorized") {
         toast.error("Session expired. Please sign in again.");
         setTimeout(() => {
-          router.push("/auth/signin");
+          router.push("/signin");
         }, 3000);
       } else if (error.message == "Chat not found") {
         toast.error(error?.message || "Failed to load messages.");

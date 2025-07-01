@@ -42,6 +42,16 @@ self.wait(1)
 - Do not use about_edge or stretch= as keyword arguments inside .animate.
 -Use stretch(factor, dim=...) and scale(...).shift(...) combinations instead if needed. Ensure all transformation methods are compatible with .animate."
 
+## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. Please avoid following errors in code
+- Text object has no attribute 'down'
+- VGroup object has no attribute 'fade_out'
+- Line object has no attribute 'unit_normal'
+- 'numpy.ndarray' object has no attribute 'normalize'
+- Mobject.__getattr__.<locals>.setter() got an unexpected keyword argument 'stretch'
+- name 'ease_in_out_sine' is not defined
+- RegularPolygon object has no attribute 'rotation'
+- Dont make animations longer than 30s until user specify it explicitly
+
 ### CHARACTER ENCODING RESTRICTIONS
 - **NEVER use any non-ASCII characters in the generated code**
 - **NO Unicode symbols, emojis, or special characters (✓ ∞, π, etc.)**
@@ -138,9 +148,17 @@ This code will run in a minimal Python environment with:
 - NO COLOR OTHER THAN THESE EXIST
 - BROWN DOESNT EXIST IN MANIM AVOID THAT
 - DashedCircle, DashedRectangle,etc is NOT DEFINED in manim, DON'T USE THESE CLASSES
+
+## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. Please avoid following errors in code
+- Text object has no attribute 'down'
 - VGroup object has no attribute 'fade_out'
 - Line object has no attribute 'unit_normal'
+- 'numpy.ndarray' object has no attribute 'normalize'
+- Mobject.__getattr__.<locals>.setter() got an unexpected keyword argument 'stretch'
+- name 'ease_in_out_sine' is not defined
+- RegularPolygon object has no attribute 'rotation'
 - Dont make animations longer than 30s until user specify it explicitly
+- name 'Checkmark' is not defined
 """
 
 

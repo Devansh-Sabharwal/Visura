@@ -31,8 +31,10 @@ export default function ChatWindow() {
   const handleSubmit = async () => {
     if (prompt.trim() == "") return;
     try {
+      const temp = prompt;
+      setPrompt("");
       await fetchPromptStream({
-        prompt,
+        prompt: temp,
         chatId: chatId || "",
         token: fastApiToken || "",
         messages,
@@ -43,12 +45,11 @@ export default function ChatWindow() {
         setRequestId,
         setActiveTab,
       });
-      setPrompt("");
     } catch (e: any) {
       if (e.message == "Unauthorized") {
         toast.error("Session expired. Please sign in again.");
         setTimeout(() => {
-          router.push("/auth/signin");
+          router.push("/signin");
         }, 1500);
       }
     }

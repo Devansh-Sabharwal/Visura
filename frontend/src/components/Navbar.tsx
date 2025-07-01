@@ -19,7 +19,7 @@ export default function Navbar() {
           onClick={() => {
             const handleLogout = async () => {
               await signOut({
-                callbackUrl: "/auth/signin", // Optional: redirect after logout
+                callbackUrl: "/signin", // Optional: redirect after logout
               });
             };
 

@@ -12,6 +12,7 @@ import { getHistory } from "@/api/history";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useIsMobile } from "@/store/isMobileStore";
+import { useChatStore } from "@/store/chatStore";
 export default function NewChat() {
   const { data, status } = useSession();
   const router = useRouter();
@@ -21,6 +22,8 @@ export default function NewChat() {
   const setPrompt = usePromptStore((state) => state.setPrompt);
   const history = useChatHistoryStore((state) => state.history);
   const setHisory = useChatHistoryStore((state) => state.setHistory);
+  const setMessages = useChatStore((state) => state.setMessages);
+
   const suggestions = [
     "Animate the fibonacci spiral being built block by block",
     "Proof pythogoras theorem",
@@ -30,9 +33,10 @@ export default function NewChat() {
   ];
   const onSubmit = () => {
     if (prompt?.trim() == "") return;
+    setMessages((prev) => []);
+
     const chatId = uuidv4();
     // router.push(`/chat/${chatId}`);
-    console.log("onSubmit called", prompt);
     router.push(`/chat/test-frontend`);
   };
   //fetch history
@@ -48,7 +52,7 @@ export default function NewChat() {
             position: "top-center",
           });
           setTimeout(() => {
-            router.push("/auth/signin");
+            router.push("/signin");
           }, 3000);
         }
       }
@@ -89,7 +93,7 @@ export default function NewChat() {
           onClick={() => {
             const handleLogout = async () => {
               await signOut({
-                callbackUrl: "/auth/signin", // Optional: redirect after logout
+                callbackUrl: "/signin", // Optional: redirect after logout
               });
             };
 

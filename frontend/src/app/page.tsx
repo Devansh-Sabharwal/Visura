@@ -1,11 +1,13 @@
-import { HeroSection } from "@/components/ui/Landing/Hero";
+import { DemoVideoSection } from "@/components/Landing/DemoVideo";
+import { HeroSection } from "@/components/Landing/Hero";
 
 export default function page() {
   return (
-    <div className="bg-black text-white">
-      <div className="min-h-screen min-w-screen text-7xl flex justify-center items-center">
+    <div className="bg-[#0a0812] font-inter">
+      <div className="overflow-hidden relative">
         <HeroSection />
       </div>
+      <DemoVideoSection />
     </div>
   );
 }
