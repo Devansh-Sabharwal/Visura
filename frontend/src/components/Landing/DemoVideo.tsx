@@ -1,23 +1,21 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import {
-  Play,
-  Pause,
-  Volume2,
-  Maximize,
-  ChevronLeft,
-  ChevronRight,
-  Sparkles,
-  Zap,
-  Eye,
-} from "lucide-react";
+import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function DemoVideoSection() {
   const [currentVideo, setCurrentVideo] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hoveredVideo, setHoveredVideo] = useState<number | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   const demoVideos = [
     {
       id: 0,
@@ -51,14 +49,6 @@ export function DemoVideoSection() {
       videoUrl:
         "https://res.cloudinary.com/dbyfsythn/video/upload/v1751193630/manim_videos/manim_videos/test-frontend/21b94545.mp4",
     },
-    {
-      id: 4,
-      title: "Pythogoras Theorem Proof",
-      prompt: "Proof pythogoras theorem",
-      thumbnail: "/thumbnail04.png",
-      videoUrl:
-        "https://res.cloudinary.com/dbyfsythn/video/upload/v1751401880/manim_videos/manim_videos/test-frontend/73f0911c.mp4",
-    },
   ];
 
   const nextVideo = () => {
@@ -84,34 +74,52 @@ export function DemoVideoSection() {
     }
   };
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      if (isPlaying) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
+    const setVideo = async () => {
+      if (videoRef.current) {
+        try {
+          videoRef.current.currentTime = 0;
+          await videoRef.current.play();
+        } catch (error) {
+          console.log("Autoplay prevented:", error);
+        }
+        setIsPlaying(true);
       }
-    }
+    };
+    setVideo();
   }, [currentVideo]);
-
   return (
-    <section className="relative min-h-screen py-20 overflow-hidden">
+    <section className="relative min-h-screen py-16 sm:py-20 overflow-hidden">
+      <div
+        className="hidden sm:absolute inset-0 bg-[size:50px_50px] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)]
+      sm:bg-[size:60px_60px]
+      "
+      ></div>
+      <div className="text-3xl px-3 mb-4 sm:mb-0 sm:text-7xl sm:translate-y-4 text-center sm:px-6 font-medium tracking-tighter bg-gradient-to-r from-white to-gray-600 bg-clip-text text-transparent">
+        Visualize the Possibilities
+      </div>
       <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6">
         {/* Main Video Player */}
         <div className="mb-12">
-          <div className="relative border border-white/10 backdrop-blur-xl rounded-3xl p-2 sm:p-4 shadow-2xl">
+          <div className="relative border border-white/20 backdrop-blur-xl rounded-3xl p-2 sm:p-4 shadow-2xl">
             {/* Video Container */}
-            <div className="relative sm:aspect-video bg-black rounded-2xl overflow-hidden group">
+            <div
+              onClick={togglePlay}
+              className="relative sm:aspect-video bg-black rounded-2xl overflow-hidden group"
+            >
               <video
+                id="demo"
+                controls={isMobile}
+                muted={true}
                 ref={videoRef}
                 src={demoVideos[currentVideo].videoUrl}
                 poster={demoVideos[currentVideo].thumbnail}
-                className="w-full h-full object-cover"
+                controlsList="seek"
+                className="w-full h-[350px] sm:h-full sm:object-cover"
               />
 
               {/* Video Overlay */}
               {
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20">
+                <div className="hidden sm:block absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20">
                   {/* Play Controls */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <button
@@ -150,7 +158,7 @@ export function DemoVideoSection() {
                     <h3 className="text-sm sm:text-2xl font-medium sm:tracking-tighter text-white sm:mb-2">
                       {demoVideos[currentVideo].title}
                     </h3>
-                    <p className="hidden sm:block tracking-tight text-green-700 text-sm max-w-2xl">
+                    <p className="hidden sm:block tracking-tight font-semibold text-indigo-300 text-sm max-w-2xl">
                       <span>Prompt : </span>
                       {demoVideos[currentVideo].prompt}
                     </p>
@@ -167,11 +175,11 @@ export function DemoVideoSection() {
               key={video.id}
               onClick={() => {
                 setCurrentVideo(index);
-                setIsPlaying(false);
+                document
+                  .getElementById("demo")
+                  ?.scrollIntoView({ behavior: "smooth" });
               }}
-              onMouseEnter={() => setHoveredVideo(index)}
-              onMouseLeave={() => setHoveredVideo(null)}
-              className={`relative group transition-all duration-300 ${
+              className={`relative group transition-all border rounded-md border-white/10 sm:border-white/20 bg-black p-1 duration-300 ${
                 currentVideo === index
                   ? "ring-2 ring-white/20 p-2 scale-105"
                   : "hover:scale-105"
@@ -181,15 +189,15 @@ export function DemoVideoSection() {
                 <img
                   src={video.thumbnail}
                   alt={video.title}
-                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+                  className="object-cover transition-all duration-300 group-hover:scale-110"
                 />
               </div>
               <div className="mt-2 text-left">
                 <h4
                   className={`text-xs sm:text-sm font-medium ${
                     currentVideo === index
-                      ? "text-purple-300"
-                      : "text-white group-hover:text-purple-300"
+                      ? "text-white"
+                      : "text-white/50 group-hover:text-white"
                   }`}
                 >
                   {video.title}
