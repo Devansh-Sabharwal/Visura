@@ -41,7 +41,7 @@ export function Navbar() {
             Features
           </Link>
           <Link
-            href="https://github.com/Devansh-Sabharwal"
+            href="#demo"
             className="hover:scale-110 transition-all duration-300 cursor-pointer"
           >
             Examples
@@ -85,10 +85,7 @@ export function Navbar() {
             <Link href="#features" className="text-sm cursor-pointer">
               Features
             </Link>
-            <Link
-              href="https://github.com/Devansh-Sabharwal"
-              className="text-sm cursor-pointer"
-            >
+            <Link href="#demo" className="text-sm cursor-pointer">
               Examples
             </Link>
             <Link href="/signin" className="text-sm cursor-pointer">

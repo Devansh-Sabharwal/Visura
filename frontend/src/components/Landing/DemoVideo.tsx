@@ -74,18 +74,28 @@ export function DemoVideoSection() {
     }
   };
   useEffect(() => {
-    const setVideo = async () => {
-      if (videoRef.current) {
-        try {
-          videoRef.current.currentTime = 0;
-          await videoRef.current.play();
-        } catch (error) {
-          console.log("Autoplay prevented:", error);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play(); // Auto-play when in view
+            setIsPlaying(true);
+          } else {
+            videoRef.current.pause(); // Pause when out of view
+            setIsPlaying(false);
+          }
         }
-        setIsPlaying(true);
-      }
+      },
+      { threshold: 0.5 } // Adjust threshold for when video should start playing
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      if (videoRef.current) observer.unobserve(videoRef.current);
     };
-    setVideo();
   }, [currentVideo]);
   return (
     <section className="relative min-h-screen py-16 sm:py-20 overflow-hidden">

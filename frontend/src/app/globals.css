@@ -102,3 +102,6 @@ background: radial-gradient(131.27% 131.27% at 50% 131.27%, #000000 61.54%, #1E1
     background-position: 100% center;
   }
 }
+html {
+  scroll-behavior: smooth;
+}

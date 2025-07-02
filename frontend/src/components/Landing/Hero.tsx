@@ -40,7 +40,7 @@ export function HeroSection() {
           Get Started
         </Link>
         <Link
-          href={"/"}
+          href={"/#demo"}
           className=" w-72 sm:w-fit transition-all justify-center duration-300 flex items-center text-sm sm:text-lg rounded-xl px-3 sm:px-6 py-3 sm:py-3 border"
         >
           Explore Examples

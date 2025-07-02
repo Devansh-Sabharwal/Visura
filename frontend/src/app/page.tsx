@@ -1,4 +1,5 @@
 import { DemoVideoSection } from "@/components/Landing/DemoVideo";
+import Features from "@/components/Landing/Features";
 import { HeroSection } from "@/components/Landing/Hero";
 import HowItWorks from "@/components/Landing/HowItWorks";
 
@@ -10,6 +11,7 @@ export default function page() {
       </div>
       <DemoVideoSection />
       <HowItWorks />
+      <Features />
     </div>
   );
 }
