@@ -112,7 +112,8 @@ const ShortFeatureCard = ({
       sm:bg-[size:60px_60px]
       "
       ></div>
-      <div className="p-2 sm:p-0 not-first:sm:text-center text-xl sm:text-4xl tracking-tighter font-semibold bg-gradient-to-r from-white to-[#6633EE] bg-clip-text text-transparent leading-tight">
+      <div className="p-2 sm:p-0 sm:text-center text-xl sm:text-4xl tracking-tighter font-semibold bg-gradient-to-r from-white to-[#6633EE] bg-clip-text text-transparent leading-tight">
+        {" "}
         {title}
       </div>
       <div className="text-sm sm:text-base text-slate-300">{description}</div>

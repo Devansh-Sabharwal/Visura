@@ -1,5 +1,5 @@
 import React from "react";
-import { Twitter, Linkedin, Github, User, Heart, Sparkles } from "lucide-react";
+import { Twitter, Linkedin, Github, User, Heart } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -40,13 +40,11 @@ export default function Footer() {
   return (
     <footer className="relative rounded-t-2xl mx-2 border-t border-l border-r border-white/20">
       <div className="relative z-10 max-w-7xl mx-auto sm:px-6 py-8 px-3 sm:py-16">
-        {/* Main Footer Content */}
         <div className="mb-4 flex w-full justify-between">
-          {/* Brand Section */}
           <div>
             {/* Logo */}
             <div className="flex items-center gap-3 mb-4">
-              <img src={"/logo2.svg"} className="w-24 sm:w-32" />
+              <img alt="logo" src={"/logo2.svg"} className="w-24 sm:w-32" />
             </div>
 
             {/* Tagline */}
@@ -57,7 +55,6 @@ export default function Footer() {
               All with Visura's AI
             </p>
 
-            {/* Social Links */}
             <div className="flex items-center mt-4 gap-2 sm:gap-4 sm:mb-4">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
@@ -95,7 +92,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8">
           <div className="flex items-center justify-center gap-4">
             <div className="flex items-center gap-1 sm:gap-2 text-gray-400 text-xs sm:text-sm">

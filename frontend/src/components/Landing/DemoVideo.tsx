@@ -108,10 +108,8 @@ export function DemoVideoSection() {
         Visualize the Possibilities
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6">
-        {/* Main Video Player */}
         <div className="mb-12">
           <div className="relative border border-white/20 backdrop-blur-xl rounded-3xl p-2 sm:p-4 shadow-2xl">
-            {/* Video Container */}
             <div
               onClick={togglePlay}
               className="relative sm:aspect-video bg-black rounded-2xl overflow-hidden group"
@@ -161,7 +159,6 @@ export function DemoVideoSection() {
                 </div>
               }
 
-              {/* Video Info Overlay */}
               <div className="absolute bottom-6 left-6 right-6">
                 <div className="flex items-end justify-between">
                   <div className="flex-1">
