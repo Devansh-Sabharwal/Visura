@@ -53,8 +53,9 @@ body {
   );
 }
 .hero-gradient{
-background: radial-gradient(131.27% 131.27% at 50% 131.27%, #000000 61.54%, #1E1737 73.56%, #403077 83.17%, #733CB7 94.23%, #816AB7 100%)
+background: radial-gradient(139.19% 139.19% at 50% 131.27%, #000000 61.54%, #1E1737 73.56%, #403077 81.66%, #733CB7 90.55%, #A689EA 100%);
 }
+
 @media (max-width: 500px) {
   .angular-gradient {
     background: conic-gradient(
@@ -105,3 +106,29 @@ background: radial-gradient(131.27% 131.27% at 50% 131.27%, #000000 61.54%, #1E1
 html {
   scroll-behavior: smooth;
 }
+/* Frame 23 */
+
+
+.feature-card{
+background: radial-gradient(
+  circle at 200% 100%,
+  #7d7de3 0%,
+  rgba(167, 71, 196, 0) 100%
+);
+border-radius: 24px;
+}
+
+.short-feature-card{
+background: radial-gradient(
+  circle at 200% -100%,
+  #7d7de3 0%,
+  rgba(167, 71, 196, 0) 100%
+);
+border-radius: 24px;
+}
+
+.inverted-bg {
+  background-image: url('/section-bg.png');
+  transform: rotate(180deg);
+}
+

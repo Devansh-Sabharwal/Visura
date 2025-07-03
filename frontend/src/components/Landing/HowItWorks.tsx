@@ -24,9 +24,12 @@ export default function HowItWorks() {
     },
   ];
   return (
-    <div className="min-h-screen overflow-hidden bg-[url('/section-bg.png')] flex justify-center items-center bg-cover bg-center bg-no-repeat ">
+    <div
+      id="how-it-works"
+      className="min-h-screen overflow-hidden bg-[url('/section-bg.png')] flex justify-center items-center bg-cover bg-center bg-no-repeat "
+    >
       <div>
-        <div className="text-center font-medium sm:mt-32 pt-10 pb-8 text-3xl sm:text-5xl font-inter tracking-[-0.08em]">
+        <div className="text-center font-medium sm:mt-32 pt-10 pb-8 text-2xl sm:text-4xl font-inter tracking-[-0.08em]">
           How Visura works
         </div>
         <div className="flex flex-col gap-4 sm:gap-0 items-center sm:flex-row justify-between w-5xl mx-auto">

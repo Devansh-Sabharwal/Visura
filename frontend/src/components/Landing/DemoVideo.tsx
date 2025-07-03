@@ -104,7 +104,7 @@ export function DemoVideoSection() {
       sm:bg-[size:60px_60px]
       "
       ></div>
-      <div className="text-3xl px-3 mb-4 sm:mb-0 sm:text-7xl sm:translate-y-4 text-center sm:px-6 font-medium tracking-tighter bg-gradient-to-r from-white to-gray-600 bg-clip-text text-transparent">
+      <div className="text-2xl px-3 mb-4 sm:mb-0 sm:text-7xl sm:translate-y-4 text-center sm:px-6 font-medium tracking-tighter bg-gradient-to-r from-white to-gray-600 bg-clip-text text-transparent">
         Visualize the Possibilities
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6">

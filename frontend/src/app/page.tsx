@@ -1,5 +1,7 @@
+import CTA from "@/components/Landing/CTA";
 import { DemoVideoSection } from "@/components/Landing/DemoVideo";
 import Features from "@/components/Landing/Features";
+import Footer from "@/components/Landing/Footer";
 import { HeroSection } from "@/components/Landing/Hero";
 import HowItWorks from "@/components/Landing/HowItWorks";
 
@@ -12,6 +14,8 @@ export default function page() {
       <DemoVideoSection />
       <HowItWorks />
       <Features />
+      <CTA />
+      <Footer />
     </div>
   );
 }
