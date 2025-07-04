@@ -43,6 +43,7 @@ self.wait(1)
 -Use stretch(factor, dim=...) and scale(...).shift(...) combinations instead if needed. Ensure all transformation methods are compatible with .animate."
 
 ## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. Please avoid following errors in code
+- AttributeError: 'numpy.ndarray' object has no attribute 'rotate'
 - Text object has no attribute 'down'
 -Circle object has no attribute 'scale_y'
 -TypeError: unsupported operand type(s) for -: 'method' and 'float'
@@ -153,8 +154,8 @@ This code will run in a minimal Python environment with:
 - BROWN DOESNT EXIST IN MANIM AVOID THAT
 - DashedCircle, DashedRectangle,etc is NOT DEFINED in manim, DON'T USE THESE CLASSES
 
-## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. 
-## PLEASE AVOID FOLLOWING MISTAKES IN CODE
+### ABSOLUTELY FORBIDDEN ERRORS — MUST BE AVOIDED OR BACKEND WILL CRASH
+-AttributeError: 'numpy.ndarray' object has no attribute 'rotate'
 - Text object has no attribute 'down'
 -TypeError: unsupported operand type(s) for -: 'method' and 'float'
 - 'ManimColor' object has no attribute 'hex'
@@ -169,6 +170,9 @@ This code will run in a minimal Python environment with:
 - Dont make animations longer than 30s until user specify it explicitly
 - name 'Checkmark' is not defined
 - Mobject.__init__() got an unexpected keyword argument 'side_length or corner_radius
+
+## STREAMING RULE
+- Always return output in the `<<<EXPLANATION>>>` and `<<<CODE>>>` format, even if explanation or code is empty.
 """
 
 
