@@ -66,7 +66,6 @@ export const useAnimationPolling = (requestId: string) => {
         tries++;
         if (tries == maxTries)
           toast.error("Animation Not found Please Try Again");
-        setLoading(false); // prevent indefinite loading state
       }
 
       if (!isCancelled) setLoading(false);
@@ -81,8 +80,3 @@ export const useAnimationPolling = (requestId: string) => {
 
   return { videoUrl, loading };
 };
-
-// todo:-
-// error handling at backend for video gen error
-// redis celery setup
-// landing page,signup signin page

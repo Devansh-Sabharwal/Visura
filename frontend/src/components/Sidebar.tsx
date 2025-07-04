@@ -64,7 +64,7 @@ export default function Sidebar({
           <div
             onClick={() => handleClick(element.chatId)}
             key={index}
-            className="text-base sm:text-base rounded-lg hover:bg-[#383838] cursor-pointer px-2 py-1 text-white/60 my-2"
+            className="text-sm rounded-lg hover:bg-[#383838] cursor-pointer px-2 py-1 text-white/60 my-2"
           >
             {element.title}
           </div>
