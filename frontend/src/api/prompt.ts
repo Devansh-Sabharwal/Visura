@@ -95,11 +95,15 @@ export async function fetchPromptStream({
             setLoading(false);
           } else if (payload.type === "code" && payload.text) {
             setActiveTab("Code");
+            setLoading(false);
+
             code += payload.text;
           } else if (payload.type === "done") {
             setRequestId(payload.request_id);
             setActiveTab("Animation");
+            setLoading(false);
           } else if (payload.type == "error") {
+            setLoading(false);
             toast.error("Server Error Please Try Again");
           }
 

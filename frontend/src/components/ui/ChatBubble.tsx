@@ -27,7 +27,7 @@ export default function ChatBubble({ role, text, videoUrl }: Props) {
     try {
       const data = JSON.parse(text);
       explanation = data.explanation || "";
-      code = data.code || "";
+      code = data.code.trim() || "";
     } catch {
       code = text;
     }

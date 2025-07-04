@@ -66,6 +66,7 @@ export const useAnimationPolling = (requestId: string) => {
         tries++;
         if (tries == maxTries)
           toast.error("Animation Not found Please Try Again");
+        setLoading(false); // prevent indefinite loading state
       }
 
       if (!isCancelled) setLoading(false);
