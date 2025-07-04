@@ -13,7 +13,6 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        name: { label: "Name", type: "text", placeholder: "Enter your name" },
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
@@ -29,7 +28,6 @@ export const authOptions: NextAuthOptions = {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: credentials.name,
               email: credentials.email,
               password: credentials.password,
             }),

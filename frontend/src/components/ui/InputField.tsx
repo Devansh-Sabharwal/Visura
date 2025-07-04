@@ -30,14 +30,14 @@ const Input = ({
       <input
         disabled={disabled}
         type={type}
-        className="text-white w-full px-3 py-2 border border-gray-300/20 rounded-md "
+        className="text-white w-full px-3 py-2 border border-gray-300/20 rounded-md focus:outline-none"
         placeholder={placeholder}
         required={required}
         value={value}
         onChange={onChange}
       />
       {error && (
-        <div className="mt-2 text-red-500 text-sm text-right">{error}</div>
+        <div className="mt-2 text-red-400 text-sm text-right">{error}</div>
       )}
     </div>
   );
@@ -77,7 +77,7 @@ export function PasswordInput({
         <input
           disabled={disabled}
           type={showPassword ? "text" : "password"}
-          className="text-white w-full px-3 py-2 border border-gray-300/20 rounded-md focus:outline-none focus:border-transparent pr-10"
+          className="text-white w-full px-3 py-2 border border-gray-300/20 rounded-md focus:outline-none  pr-10"
           placeholder={placeholder}
           required={required}
           value={value}

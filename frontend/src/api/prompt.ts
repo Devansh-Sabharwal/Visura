@@ -1,5 +1,4 @@
 import { Message } from "@/types/message";
-import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export async function fetchPromptStream({
