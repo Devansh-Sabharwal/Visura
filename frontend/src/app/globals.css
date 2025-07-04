@@ -55,7 +55,12 @@ body {
 .hero-gradient{
 background: radial-gradient(139.19% 139.19% at 50% 131.27%, #000000 61.54%, #1E1737 73.56%, #403077 81.66%, #733CB7 90.55%, #A689EA 100%);
 }
-
+.auth-gradient{
+background: radial-gradient(139.19% 139.19% at 50% 131.27%, #000000 71.54%, #1E1737 83.56%, #403077 91.66%, #733CB7 100%);
+}
+.btn-gradient{
+  background:linear-gradient(to bottom, rgb(139, 85, 255) 0%, rgb(55, 63, 224) 100%);
+}
 @media (max-width: 500px) {
   .angular-gradient {
     background: conic-gradient(

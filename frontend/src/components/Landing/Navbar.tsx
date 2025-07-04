@@ -55,11 +55,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/signup"
-              style={{
-                background:
-                  "linear-gradient(to bottom, rgb(139, 85, 255) 0%, rgb(55, 63, 224) 100%)",
-              }}
-              className="hover:scale-105 rounded-xl sm:rounded-xl text-xs sm:text-sm font-medium text-white p-2 sm:px-4 cursor-pointer transition-all duration-300"
+              className="hover:scale-105 btn-gradient rounded-xl sm:rounded-xl text-xs sm:text-sm font-medium text-white p-2 sm:px-4 cursor-pointer transition-all duration-300"
             >
               Try Now
             </Link>
