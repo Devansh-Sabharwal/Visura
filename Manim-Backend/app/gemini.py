@@ -44,6 +44,12 @@ self.wait(1)
 
 ## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. Please avoid following errors in code
 - Text object has no attribute 'down'
+-Circle object has no attribute 'scale_y'
+-TypeError: unsupported operand type(s) for -: 'method' and 'float'
+- 'ManimColor' object has no attribute 'hex'
+- Mobject.__init__() got an unexpected keyword argument 'side_length
+- TypeError: unhashable type: 'numpy.ndarray'
+- 'Camera' object has no attribute 'frame'
 - VGroup object has no attribute 'fade_out'
 - Line object has no attribute 'unit_normal'
 - 'numpy.ndarray' object has no attribute 'normalize'
@@ -80,8 +86,6 @@ self.wait(1)
 - Never use `end_angle` parameter
 
 ### Text Objects
-- **ALWAYS use Text() with font_size parameter**
-- **font_size: 36 for titles, 24 for regular text, minimum 18**
 - **Only ASCII characters in text strings**
 - **Example: Text("Hello World", font_size=24)**
 
@@ -110,7 +114,6 @@ axes = Axes(
 
 ### Animation Rules
 - Use Create(), Write(), FadeIn(), Transform(), Rotate()
-- Run times: 1-3 seconds for simple animations
 - Use self.wait(0.5) between animation groups
 - End with self.wait(1)
 
@@ -136,6 +139,7 @@ axes = Axes(
 - Custom fonts or font loading
 - Deprecated Manim methods
 - Non-ASCII text content
+- Circle object has no attribute 'scale_y'
 
 ## EXECUTION ENVIRONMENT REMINDER
 This code will run in a minimal Python environment with:
@@ -149,8 +153,13 @@ This code will run in a minimal Python environment with:
 - BROWN DOESNT EXIST IN MANIM AVOID THAT
 - DashedCircle, DashedRectangle,etc is NOT DEFINED in manim, DON'T USE THESE CLASSES
 
-## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. Please avoid following errors in code
+## Common Errors in Code that you have to avoid at any cost otherwise animation will crash. 
+## PLEASE AVOID FOLLOWING MISTAKES IN CODE
 - Text object has no attribute 'down'
+-TypeError: unsupported operand type(s) for -: 'method' and 'float'
+- 'ManimColor' object has no attribute 'hex'
+- TypeError: unhashable type: 'numpy.ndarray'
+- 'Camera' object has no attribute 'frame'
 - VGroup object has no attribute 'fade_out'
 - Line object has no attribute 'unit_normal'
 - 'numpy.ndarray' object has no attribute 'normalize'
@@ -159,6 +168,7 @@ This code will run in a minimal Python environment with:
 - RegularPolygon object has no attribute 'rotation'
 - Dont make animations longer than 30s until user specify it explicitly
 - name 'Checkmark' is not defined
+- Mobject.__init__() got an unexpected keyword argument 'side_length or corner_radius
 """
 
 
@@ -173,7 +183,7 @@ def manim_script_from_prompt(history: list[dict[str, str]]) -> str:
         resp = client.models.generate_content_stream(
             model="gemini-2.5-flash-preview-05-20",
             config=types.GenerateContentConfig(
-                temperature=0.2,
+                temperature=0.3,
                 max_output_tokens=20_000,
                 system_instruction=SYSTEM_PROMPT
             ),
@@ -186,32 +196,6 @@ def manim_script_from_prompt(history: list[dict[str, str]]) -> str:
     except Exception as e:
         print("Error generated at 170 gemini.py", e)
         return f"Error generating script: {e}"
-
-def _extract_response_text(response) -> str:
-    """Extract text from Gemini API response"""
-    try:
-        if response.candidates and len(response.candidates) > 0:
-            candidate = response.candidates[0]
-            
-            # Check if response was truncated
-            if hasattr(candidate, 'finish_reason') and candidate.finish_reason == 'MAX_TOKENS':
-                print("Warning: Response was truncated due to token limit")
-            
-            if candidate.content and candidate.content.parts:
-                
-                parts_text = []
-                for part in candidate.content.parts:
-                    if hasattr(part, 'text') and part.text:
-                        parts_text.append(part.text)
-                
-                if parts_text:
-                    return ' '.join(parts_text).strip()
-        
-        return "No response generated"
-        
-    except Exception as e:
-        print(f"Error extracting response text: {e}")
-        return "Error extracting response"
 
 
 

@@ -98,6 +98,7 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
     vid_path = None
 
     try:
+        start = time.time()
         script = script.strip()
         if script.startswith("```"):
             # Remove first line entirely (handles ``` or ```python)
@@ -107,13 +108,16 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
         if script.endswith("```"):
             script = "\n".join(script.split("\n")[:-1]).rstrip()
         scene = find_scene_class(script)
+        print(time.time()-start,"seconds taken to find scene class")
         if not scene:
             print("error raised at line 27 video.py")
             raise RuntimeError("Gemini did not define a scene class")
         
+        start = time.time()
         file_id = uuid.uuid4().hex[:8]
         py_file = RENDER_DIR / f"scene_{file_id}.py"
         py_file.write_text(textwrap.dedent(script))
+        print(time.time()-start,"seconds taken to write scene class")
 
         vid_path = render_with_manim(py_file, scene)
 

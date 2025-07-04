@@ -17,7 +17,7 @@ from app.utils.video import generate_video_from_stream
 from app.db.db import SessionLocal
 import asyncio
 import uuid
-
+import time
 class ChatResponse(BaseModel):
     success: bool
     chatId: str
@@ -124,7 +124,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             
             yield f"data: {json.dumps({'type': 'debug', 'text': 'starting stream...'})}\n\n"
             await asyncio.sleep(0.01)
-            print("response sent")
+            start = time.time()
             
             try:
                 resp = client.models.generate_content_stream(
@@ -132,7 +132,8 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
                     config=types.GenerateContentConfig(
                         temperature=0.1,
                         max_output_tokens=20000,
-                        system_instruction=SYSTEM_PROMPT
+                        system_instruction=SYSTEM_PROMPT,
+                        thinking_config=types.ThinkingConfig(thinking_budget=0)
                     ),
                     contents=contents
                 )
@@ -140,10 +141,10 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
                 for chunk in resp:
                     if not chunk.text:
                         continue
-                    
-                    # Add new chunk to buffer
                     buffer += chunk.text
-                    
+                    if(start!=0):
+                        print(time.time()-start,"seconds taken by gemini to respond")
+                        start = 0
                     # Process and stream immediately, but keep potential delimiter parts
                     while len(buffer) > max_delimiter_len:
                         # Look for complete delimiters
@@ -299,3 +300,4 @@ def generateTitleFromPrompt(prompt):
     if len(words) > 8:
         title += "..."
     return title
+    

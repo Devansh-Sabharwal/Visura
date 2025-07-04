@@ -11,7 +11,8 @@ async def auth_middleware(request: Request, call_next):
         "/docs",
         "/redoc",
         "/openapi.json",
-        "/favicon.ico"
+        "/favicon.ico",
+        "/ping"
     ]
     
     # Skip auth for public paths
@@ -25,7 +26,6 @@ async def auth_middleware(request: Request, call_next):
     token = auth_header.split(" ")[1]
     try:
         payload = verify_access_token(token)
-        print(payload)
         if not payload or "id" not in payload:
             return JSONResponse(status_code=401, content={"detail": "Invalid token payload"})
         
