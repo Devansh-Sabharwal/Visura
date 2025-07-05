@@ -188,11 +188,11 @@ def render_with_manim(py_file: Path, scene_class: str) -> Path:
         subprocess.run(
             ["manim", str(py_file), scene_class, "-ql", "--fps", "15", "-r", "854,480"],
             check=True,
-            cwd=BASE_DIR
+            cwd=BASE_DIR,
+            capture_output=True
         )
 
     except subprocess.CalledProcessError as err:
-        
         error_msg = err.stderr.decode() if err.stderr else str(err)
         print("error raised at line 195 video.py",err)
 

@@ -62,10 +62,10 @@ export const useAnimationPolling = (requestId: string) => {
           console.error("Polling error:", e);
         }
 
-        await new Promise((res) => setTimeout(res, 3000)); // 4-second delay
+        await new Promise((res) => setTimeout(res, 3000));
         tries++;
         if (tries == maxTries)
-          toast.error("Animation Not found Please Try Again");
+          toast.error("Server Failed to Generate your Animation");
       }
 
       if (!isCancelled) setLoading(false);
