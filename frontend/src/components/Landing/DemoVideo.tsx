@@ -31,7 +31,7 @@ export function DemoVideoSection() {
         "Flash greetings in different languages one after another instantly making a fast greeting Animation",
       thumbnail: "thumbnail01.png",
       videoUrl:
-        "https://res.cloudinary.com/dbyfsythn/video/upload/v1750595726/manim_videos/manim_videos/testing/93b49190.mp4",
+        "https://res.cloudinary.com/dbyfsythn/video/upload/v1751695604/manim_videos/manim_videos/00219bd7-a946-442c-85a6-0cf389a00297/f12a5f90.mp4",
     },
     {
       id: 2,
@@ -39,7 +39,7 @@ export function DemoVideoSection() {
       prompt: "Explain How LLM's work through animation",
       thumbnail: "thumbnail02.png",
       videoUrl:
-        "https://res.cloudinary.com/dbyfsythn/video/upload/v1751122910/manim_videos/manim_videos/test-frontend/974e3436.mp4",
+        "https://res.cloudinary.com/dbyfsythn/video/upload/v1751696788/manim_videos/manim_videos/00219bd7-a946-442c-85a6-0cf389a00297/9e80f3df.mp4",
     },
     {
       id: 3,
@@ -192,7 +192,7 @@ export function DemoVideoSection() {
                   : "hover:scale-105"
               }`}
             >
-              <div className="aspect-video rounded-xl overflow-hidden">
+              <div className="aspect-video rounded overflow-hidden">
                 <img
                   src={video.thumbnail}
                   alt={video.title}

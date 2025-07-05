@@ -141,7 +141,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
                 for chunk in resp:
                     if not chunk.text:
                         continue
-                    buffer += chunk.text
+                    buffer += chunk.text.replace("\\n", "\n")
                     if(start!=0):
                         print(time.time()-start,"seconds taken by gemini to respond")
                         start = 0
@@ -262,10 +262,10 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             
             
             yield f"data: {json.dumps({'type': 'done', 'request_id': request_id})}\n\n"
-
+            clean_code = code_text.replace("\\n", "\n")
             data = {
                 "explanation": explanation_text,
-                "code": code_text
+                "code": clean_code
             }
             content = json.dumps(data)
                         
