@@ -110,7 +110,7 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
         scene = find_scene_class(script)
         print(time.time()-start,"seconds taken to find scene class")
         if not scene:
-            print("error raised at line 27 video.py")
+            print("error raised at line 113 video.py")
             raise RuntimeError("Gemini did not define a scene class")
         
         start = time.time()
@@ -147,7 +147,7 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
         }
 
     except Exception as e: 
-        print("error raised at line 55 video.py", e)
+        print("error raised at line 150 video.py", e)
         raise RuntimeError("Error while generating video") from e
 
     finally:
@@ -192,14 +192,17 @@ def render_with_manim(py_file: Path, scene_class: str) -> Path:
         )
 
     except subprocess.CalledProcessError as err:
-        print("error raised at line 67 video.py",err)
+        
+        error_msg = err.stderr.decode() if err.stderr else str(err)
+        print("error raised at line 195 video.py",err)
+
         raise RuntimeError(f"Manim failed: {err}") from err
     
     print(time.time()-start,"to execute manim code")
     
     vid_path = video_output_path(py_file, scene_class)
     if not vid_path.exists():
-        print("error raised at line 71 video.py")
+        print("error raised at line 202 video.py")
         raise RuntimeError("Expected video not found after rendering.")
     return vid_path
 
@@ -229,5 +232,5 @@ async def upload_video_to_cloudinary(video_path: Path, chatId: str, file_id: str
         return response
 
     except Exception as e:
-        print("error raised at line 101 video.py", e)
+        print("error raised at line 232 video.py", e)
         raise RuntimeError(f"Failed to upload to Cloudinary: {str(e)}")

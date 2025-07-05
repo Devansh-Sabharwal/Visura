@@ -26,7 +26,7 @@ export default function NewChat() {
 
   const suggestions = [
     "Animate Depth first search algorithm",
-    "Proof pythogoras theorem",
+    "Show a green circle moving across the screen with 'Hello World' text",
     "Explain black holes through animations",
     "Make a geometric design animation",
     "Animate bubble sort sorting algorithm",
@@ -37,7 +37,6 @@ export default function NewChat() {
 
     const chatId = uuidv4();
     router.push(`/chat/${chatId}`);
-    // router.push(`/chat/test-frontend`);
   };
   //fetch history
   useEffect(() => {
@@ -51,9 +50,9 @@ export default function NewChat() {
           toast.error("Session expired. Please sign in again.", {
             position: "top-center",
           });
-          setTimeout(() => {
-            router.push("/signin");
-          }, 3000);
+          await signOut({
+            callbackUrl: "/signin", // Optional: redirect after logout
+          });
         }
       }
     };
