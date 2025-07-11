@@ -2,19 +2,18 @@ from fastapi import APIRouter,Depends,HTTPException
 from fastapi import Request
 from sqlmodel import Session
 from sqlalchemy.exc import SQLAlchemyError
+from app.celery.tasks import render_and_upload_video
 from app.db.db import get_session
 from pydantic import BaseModel
 from app.db.models import Message,Chat
 from app.db.crud import create_message,getContext
-from app.utils.video import generate_video,generate_video_from_stream
+from app.utils.video import generate_video
 from sqlmodel import select
 from typing import Optional
 from fastapi.responses import StreamingResponse
 from fastapi import BackgroundTasks
 from app.gemini import build_content_list, client, types, SYSTEM_PROMPT
 import json
-from app.utils.video import generate_video_from_stream
-from app.db.db import SessionLocal
 import asyncio
 import uuid
 import time
@@ -272,27 +271,15 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             new_message = Message(role="model", content=content,chatId=chat_id)
             message = create_message(session, new_message)
             session.commit()
-            print(message.id)
-            background_tasks.add_task(generate_video_background, code_text, chat_id,request_id,message.id)
+            print("message id: ",message.id)
+            render_and_upload_video.delay(code_text, chat_id,request_id,message.id)
 
         except Exception as e:
             session.rollback()
+            print(e)
             yield f"data: {json.dumps({'type': 'error', 'text': 'Database Error'})}\n\n"
             return
     return StreamingResponse(generate_stream(), media_type="text/plain")
-
-
-def generate_video_background(code_text, chat_id,request_id,message_id):
-    session = SessionLocal()
-    try:
-        print("generate_video_background started")
-        asyncio.run(generate_video_from_stream(code_text, chat_id, request_id,message_id,session))
-    except Exception as e:
-        
-        print(f"[VideoGen Error] for chat_id={chat_id}: {str(e)}")
-
-    finally:
-        session.close()
 
 def generateTitleFromPrompt(prompt):
     words = prompt.split(" ")
