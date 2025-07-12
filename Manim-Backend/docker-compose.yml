@@ -1,12 +1,37 @@
-# docker-compose.yml
 services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      
+    container_name: visura-api
+    
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+    
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_URL=${CLOUDINARY_URL}
   redis:
     image: redis
     ports: ["6379:6379"]
+    restart: always
 
   celery:
     build: .
     command: celery -A app.celery.celery worker --loglevel=info -Q video_tasks
+    restart: always
     depends_on: [redis]
     volumes:
       - .:/app
