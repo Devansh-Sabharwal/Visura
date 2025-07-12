@@ -175,34 +175,6 @@ This code will run in a minimal Python environment with:
 - Always return output in the `<<<EXPLANATION>>>` and `<<<CODE>>>` format, even if explanation or code is empty.
 """
 
-
-def manim_script_from_prompt(history: list[dict[str, str]]) -> str:
-    """
-    history ── list of {"role": "user" | "assistant", "content": "..."}
-    Returns Gemini’s reply text.
-    """
-    try:
-        contents = build_content_list(history)
-
-        resp = client.models.generate_content_stream(
-            model="gemini-2.5-flash-preview-05-20",
-            config=types.GenerateContentConfig(
-                temperature=0.3,
-                max_output_tokens=20_000,
-                system_instruction=SYSTEM_PROMPT
-            ),
-            contents=contents
-        )
-        for chunk in resp:
-          print(chunk.text, end="")
-        # return _extract_response_text(resp)
-
-    except Exception as e:
-        print("Error generated at 170 gemini.py", e)
-        return f"Error generating script: {e}"
-
-
-
 def build_content_list(history: list[dict[str, str]]) -> list[types.Content]:
     """
     Convert our own history records (dicts with 'role' & 'content')

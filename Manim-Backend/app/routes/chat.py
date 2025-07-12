@@ -1,13 +1,11 @@
-from fastapi import APIRouter,Depends,HTTPException
+from fastapi import APIRouter,Depends
 from fastapi import Request
 from sqlmodel import Session
-from sqlalchemy.exc import SQLAlchemyError
 from app.celery.tasks import render_and_upload_video
 from app.db.db import get_session
 from pydantic import BaseModel
 from app.db.models import Message,Chat
 from app.db.crud import create_message,getContext
-from app.utils.video import generate_video
 from sqlmodel import select
 from typing import Optional
 from fastapi.responses import StreamingResponse
@@ -16,7 +14,6 @@ from app.gemini import build_content_list, client, types, SYSTEM_PROMPT
 import json
 import asyncio
 import uuid
-import time
 class ChatResponse(BaseModel):
     success: bool
     chatId: str
@@ -33,67 +30,11 @@ class PromptReq(BaseModel):
 
 router = APIRouter(prefix="/chat",tags=["Chats"])
 
-@router.post('/prompt')
-async def chat(body:PromptReq,req:Request,session:Session=Depends(get_session)):
-    try:
-        print("request reached")
-        userId  = req.state.user_id
-        prompt  = body.prompt
-        chatId = body.chatId
-
-        chat = session.exec(select(Chat).where(Chat.id == chatId)).first()
-        print("userId:",userId,"\n","prompt:",prompt,"\n","chatId:",chatId,"\n")
-        if not chat:
-            chat = Chat(
-                id=chatId,
-                userId=userId,
-                title=f"{chatId[:6]}",  # Optional: Give it a default title
-            )
-            session.add(chat)
-            session.commit()
-
-
-        new_message = Message(
-            role="user",
-            content=prompt,
-            chatId=chatId,
-        )
-        create_message(session,new_message)
-        context = getContext(session,chatId,3)
-        
-        video_result = await generate_video(context, chatId, session)
-        session.commit()
-        return ChatResponse(
-            success=True,
-            chatId=chatId,
-            video_url=video_result["video_url"],
-            public_id=video_result["public_id"],
-            message="Video generated successfully",
-            script=None  # Don't send script to frontend unless needed
-        )
-        
-    except SQLAlchemyError as e:
-        print(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=500, 
-            detail="Database error occurred"
-        ) from e
-        
-    except Exception as e:
-        session.rollback()
-        raise HTTPException(status_code=501,detail=f"Error in Video generation try again: {str(e)}")
-
-
-
 @router.post("/prompt-stream")
 async def stream_chat(body: PromptReq, req: Request, background_tasks: BackgroundTasks,session: Session = Depends(get_session)):
     user_id = req.state.user_id
     prompt = body.prompt
     chat_id = body.chatId
-    print(user_id)
-    print(prompt)
-    print(chat_id)
     request_id = uuid.uuid4().hex
     async def generate_stream():
         try:
@@ -118,12 +59,10 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             CODE_DELIMITER = "<<<CODE>>>"
             EXPLANATION_DELIMITER = "<<<EXPLANATION>>>"
             
-            # Keep track of partial delimiters
             max_delimiter_len = max(len(CODE_DELIMITER), len(EXPLANATION_DELIMITER))
             
             yield f"data: {json.dumps({'type': 'debug', 'text': 'starting stream...'})}\n\n"
             await asyncio.sleep(0.01)
-            start = time.time()
             
             try:
                 resp = client.models.generate_content_stream(
@@ -142,7 +81,6 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
                         continue
                     buffer += chunk.text.replace("\\n", "\n")
                     if(start!=0):
-                        print(time.time()-start,"seconds taken by gemini to respond")
                         start = 0
                     # Process and stream immediately, but keep potential delimiter parts
                     while len(buffer) > max_delimiter_len:
@@ -201,13 +139,13 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
                             
                             break
                 
-                # Process any remaining buffer content (final chunk)
+                
                 if buffer:
-                    # Check one more time for delimiters in the final buffer
+                    
                     code_pos = buffer.find(CODE_DELIMITER)
                     explanation_pos = buffer.find(EXPLANATION_DELIMITER)
                     
-                    # Process any remaining delimiters
+    
                     while code_pos != -1 or explanation_pos != -1:
                         earliest_pos = -1
                         next_type = None
@@ -271,7 +209,6 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             new_message = Message(role="model", content=content,chatId=chat_id)
             message = create_message(session, new_message)
             session.commit()
-            print("message id: ",message.id)
             render_and_upload_video.delay(code_text, chat_id,request_id,message.id)
 
         except Exception as e:

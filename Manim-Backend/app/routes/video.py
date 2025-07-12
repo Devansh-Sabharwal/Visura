@@ -1,6 +1,5 @@
 from fastapi import APIRouter,Depends,HTTPException
 from sqlmodel import Session
-from sqlalchemy.exc import SQLAlchemyError
 from app.db.db import get_session
 from app.db.models import ManimVideo
 from sqlmodel import select
