@@ -15,7 +15,8 @@ services:
       - redis
     
     environment:
-      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_BACKEND_URL=redis://redis:6379/0
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
@@ -33,5 +34,8 @@ services:
     command: celery -A app.celery.celery worker --loglevel=info -Q video_tasks
     restart: always
     depends_on: [redis]
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_BACKEND_URL=redis://redis:6379/0
     volumes:
       - .:/app

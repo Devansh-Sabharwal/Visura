@@ -80,8 +80,6 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
                     if not chunk.text:
                         continue
                     buffer += chunk.text.replace("\\n", "\n")
-                    if(start!=0):
-                        start = 0
                     # Process and stream immediately, but keep potential delimiter parts
                     while len(buffer) > max_delimiter_len:
                         # Look for complete delimiters

@@ -27,7 +27,7 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
         scene = find_scene_class(script)
         
         if not scene:
-            
+            print("Gemini didnt define a scene class")
             raise RuntimeError("Gemini did not define a scene class")
         
     
@@ -56,18 +56,17 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
             message.video_id = video.id
             session.add(message)
             session.commit()
-        print(cloudinary_response['secure_url'])
+        print("videoURL ",cloudinary_response['secure_url'])
         return {
             "video_url": cloudinary_response['secure_url'],
             "public_id": cloudinary_response['public_id']
         }
 
     except Exception as e: 
+        print(e)
         raise RuntimeError("Error while generating video") from e
 
     finally:
-        # Clean up the .py script
-        
         if py_file and py_file.exists():
             py_file.unlink()
         
@@ -95,6 +94,10 @@ async def generate_video_from_stream(script,chatId,request_id,message_id,session
                 except Exception as e:
                     print(f"Failed to delete {file.name} in media dir: {e}")
                 
+        try:
+            media_dir.rmdir()
+        except Exception as e:
+            print(f"Failed to delete scene folder")
 
 def render_with_manim(py_file: Path, scene_class: str) -> Path:
     """Run manim. Return path to the rendered MP4 (raises on error)."""
@@ -107,6 +110,7 @@ def render_with_manim(py_file: Path, scene_class: str) -> Path:
         )
 
     except subprocess.CalledProcessError as err:
+        print(err)
         raise RuntimeError(f"Manim failed: {err}") from err
     
     

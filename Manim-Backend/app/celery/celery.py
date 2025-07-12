@@ -1,9 +1,11 @@
 from celery import Celery
-
+from dotenv import load_dotenv
+load_dotenv()
+import os
 celery_app = Celery(
     "visura_tasks",  
-    broker="redis://localhost:6379/0",
-    backend="redis://localhost:6379/0",
+    broker=os.getenv("CELERY_BROKER_URL"),
+    backend=os.getenv("CELERY_BACKEND_URL"),
 )
 
 celery_app.conf.task_routes = {
