@@ -57,8 +57,10 @@ export default function Chat() {
     }
     const fetchData = async () => {
       try {
+        const temp = prompt;
+        setPrompt("");
         await fetchPromptStream({
-          prompt,
+          prompt: temp,
           chatId: cid,
           token: data?.fastApiToken || "",
           messages,
