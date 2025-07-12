@@ -22,7 +22,7 @@ export function HeroSection() {
               Frame in Seconds
             </div>
             <div className="text-gray-300 mt-2 sm:mt-8 font-normal text-sm sm:text-xl tracking-normal sm:tracking-[-0.03em]">
-              Say it. See it. Animate it. All with Visura's AI
+              {`Say it. See it. Animate it. All with Visura's AI`}
             </div>
           </div>
         </div>

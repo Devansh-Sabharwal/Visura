@@ -21,7 +21,7 @@ export default function SignInPage() {
       await signIn("google", {
         callbackUrl: "/chat",
       });
-    } catch (err) {
+    } catch {
       toast.error("Google sign-in failed.");
       setGoogleLoading(false);
     }
@@ -54,7 +54,7 @@ export default function SignInPage() {
         toast.success("successful");
         router.push("/chat");
       }
-    } catch (err) {
+    } catch {
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -112,7 +112,11 @@ export default function SignInPage() {
             className="w-full cursor-pointer flex justify-center bg-white hover:bg-gray-300 transition-all duration-300 text-black mt-2 py-2 rounded-lg disabled:opacity-50"
           >
             <span>
-              <img src="/googleicon.svg" className="mr-4 w-6 h-6" />
+              <img
+                alt="google-icon"
+                src="/googleicon.svg"
+                className="mr-4 w-6 h-6"
+              />
             </span>
             <span className="font-medium">
               {" "}

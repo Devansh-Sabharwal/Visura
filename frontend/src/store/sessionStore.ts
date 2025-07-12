@@ -12,7 +12,7 @@ interface SessionState {
   clearSession: () => void;
 }
 
-export const useSessionStore = create<SessionState>((set, get) => ({
+export const useSessionStore = create<SessionState>((set) => ({
   session: null,
   fastApiToken: null,
   isLoading: true,

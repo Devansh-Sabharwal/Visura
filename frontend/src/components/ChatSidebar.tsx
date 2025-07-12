@@ -30,14 +30,16 @@ export default function ChatSidebar() {
       try {
         const history = await getHistory(data?.fastApiToken || "");
         setHisory(history.chats);
-      } catch (e: any) {
-        if (e.message === "Unauthorized") {
-          toast.error("Session expired. Please sign in again.", {
-            position: "top-center",
-          });
-          setTimeout(() => {
-            router.push("/signin");
-          }, 3000);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          if (e.message === "Unauthorized") {
+            toast.error("Session expired. Please sign in again.", {
+              position: "top-center",
+            });
+            setTimeout(() => {
+              router.push("/signin");
+            }, 3000);
+          }
         }
       }
     };

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import ChatWindow from "./ChatWindow";
 import AnimationWindow from "./AnimationWindow";
 import ChatSidebar from "./ChatSidebar";

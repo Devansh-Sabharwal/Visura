@@ -5,7 +5,6 @@ import ChatBubble from "./ui/ChatBubble";
 import { useCodeStore } from "@/store/codeStore";
 import { usePromptStore } from "@/store/promptStore";
 import { fetchPromptStream } from "@/api/prompt";
-import { useSession } from "next-auth/react";
 import { BeatLoader } from "react-spinners";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
@@ -45,12 +44,14 @@ export default function ChatWindow() {
         setRequestId,
         setActiveTab,
       });
-    } catch (e: any) {
-      if (e.message == "Unauthorized") {
-        toast.error("Session expired. Please sign in again.");
-        setTimeout(() => {
-          router.push("/signin");
-        }, 1500);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        if (e.message == "Unauthorized") {
+          toast.error("Session expired. Please sign in again.");
+          setTimeout(() => {
+            router.push("/signin");
+          }, 1500);
+        }
       }
     }
   };

@@ -12,6 +12,7 @@ import { fetchPromptStream } from "@/api/prompt";
 import { useAnimationStore } from "@/store/animationStore";
 import { useActiveTabStore } from "@/store/activeTabStore";
 import { useIsMobile } from "@/store/isMobileStore";
+import { MessageResponse } from "@/types/message";
 
 export default function Chat() {
   const router = useRouter();
@@ -39,12 +40,13 @@ export default function Chat() {
     (state) => state.setMobileActiveTab
   );
   useEffect(() => {
-    setMessages((prev) => []);
+    setMessages(() => []);
     setChatId(cid);
     setCode("");
     setActiveTab("Code");
     setMobileActiveTab("Chat");
     setRequestId("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cid]);
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function Chat() {
         await fetchPromptStream({
           prompt,
           chatId: cid,
-          token: data?.fastApiToken!,
+          token: data?.fastApiToken || "",
           messages,
           setMessages,
           setPrompt,
@@ -67,16 +69,19 @@ export default function Chat() {
           setRequestId,
           setActiveTab,
         });
-      } catch (e: any) {
-        if (e.message == "Unauthorized") {
-          toast.error("Session expired. Please sign in again.");
-          setTimeout(() => {
-            router.push("/signin");
-          }, 1500);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          if (e.message == "Unauthorized") {
+            toast.error("Session expired. Please sign in again.");
+            setTimeout(() => {
+              router.push("/signin");
+            }, 1500);
+          }
         }
       }
     };
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   useEffect(() => {
@@ -95,21 +100,26 @@ export default function Chat() {
         toast.error(error?.message || "Failed to load messages.");
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, isError]);
 
   useEffect(() => {
     if (content?.messages) {
-      const formattedMessages = content.messages.map((msg: any) => ({
-        role: msg.role,
-        content: msg.content,
-        timestamp: msg.timestamp,
-        videoUrl: msg.video_url,
-      }));
+      const formattedMessages = content.messages.map(
+        (msg: MessageResponse) => ({
+          role: msg.role,
+          content: msg.content,
+          timestamp: msg.timestamp,
+          videoUrl: msg.video_url,
+        })
+      );
       setMessages(formattedMessages);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
   useEffect(() => {
     setLoading(isPending);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPending]);
 
   useEffect(() => {

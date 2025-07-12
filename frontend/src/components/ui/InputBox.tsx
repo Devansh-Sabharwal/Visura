@@ -1,5 +1,5 @@
 import { ArrowUp } from "lucide-react";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 interface InputProps {
   setPrompt: (prompt: string) => void;
   onSubmit?: () => void;

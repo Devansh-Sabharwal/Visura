@@ -1,4 +1,4 @@
-import { MessageSquare, Sparkles, Download } from "lucide-react";
+import { MessageSquare, Sparkles, Download, LucideIcon } from "lucide-react";
 export default function HowItWorks() {
   const steps = [
     {
@@ -50,7 +50,7 @@ export default function HowItWorks() {
 interface HowItWorksCardProps {
   step: {
     id: number;
-    icon: React.ComponentType<any>;
+    icon: LucideIcon;
     title: string;
     description: string;
   };

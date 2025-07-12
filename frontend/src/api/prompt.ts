@@ -125,15 +125,19 @@ export async function fetchPromptStream({
         }
       }
     }
-  } catch (error: any) {
+  } catch (error) {
     setLoading(false);
 
-    if (error.message == "Unauthorized") {
-      throw new Error("Unauthorized");
-    } else if (error.message == "Internet Error") {
-      toast.error("Server Error Please Try Again");
+    if (error instanceof Error) {
+      if (error.message === "Unauthorized") {
+        throw new Error("Unauthorized");
+      } else if (error.message === "Internet Error") {
+        toast.error("Server Error Please Try Again");
+      } else {
+        toast.error(`Streaming error: ${error.message || "Unknown error"}`);
+      }
     } else {
-      toast.error(`Streaming error: ${error?.message || "Unknown error"}`);
+      toast.error("An unexpected error occurred");
     }
   }
 }

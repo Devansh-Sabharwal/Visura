@@ -1,4 +1,4 @@
-import { getServerSession, NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           throw new Error("Email and password are required");
         }
@@ -48,11 +48,13 @@ export const authOptions: NextAuthOptions = {
             name: data.name,
             fastApiToken: data.token,
           };
-        } catch (error: any) {
-          console.error("Auth error:", error);
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            console.error("Auth error:", error);
 
-          if (error.message && error.message !== "fetch failed") {
-            throw error;
+            if (error.message && error.message !== "fetch failed") {
+              throw error;
+            }
           }
 
           throw new Error("Authentication service unavailable");
@@ -83,14 +85,10 @@ export const authOptions: NextAuthOptions = {
               token.fastApiToken = data.token;
               token.userId = data.id;
               token.name = data.name;
-
-              console.log("Google signin successfull");
             } else {
-              console.log("sign in failed", response.statusText);
               throw new Error(`FastAPI error: ${response.status}`);
             }
-          } catch (error) {
-            console.error("Google auth error:", error);
+          } catch {
             throw new Error("External auth failed");
           }
         } else if (account?.provider === "credentials") {

@@ -52,7 +52,7 @@ export default function Footer() {
               Say it. See it. Animate it.
             </p>
             <p className="hidden sm:block text-gray-400 text-sm mb-6">
-              All with Visura's AI
+              {`All with Visura's AI`}
             </p>
 
             <div className="flex items-center mt-4 gap-2 sm:gap-4 sm:mb-4">
