@@ -25,3 +25,56 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+# # -------- Stage 1: Build dependencies --------
+# FROM python:3.11-slim as builder
+
+# ENV PYTHONDONTWRITEBYTECODE=1
+# ENV PYTHONUNBUFFERED=1
+
+# # Install build dependencies (for compiling pycairo, numpy, etc.)
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     build-essential \
+#     python3-dev \
+#     pkg-config \
+#     libcairo2-dev \
+#     libpango1.0-dev \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# WORKDIR /install
+
+# # Copy only requirements first to use Docker cache
+# COPY requirements.txt .
+
+# # Install Python packages to a separate folder
+# RUN pip install --upgrade pip \
+#  && pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# # -------- Stage 2: Runtime image --------
+# FROM python:3.11-slim
+
+# ENV PYTHONDONTWRITEBYTECODE=1
+# ENV PYTHONUNBUFFERED=1
+
+# # Install runtime dependencies only (lighter)
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     ffmpeg \
+#     libcairo2 \
+#     libpango-1.0-0 \
+#     libgl1 \
+#     libglib2.0-0 \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# # Copy installed packages from builder stage
+# COPY --from=builder /install /usr/local
+
+# # Set working directory
+# WORKDIR /app
+
+# # Copy source code
+# COPY . .
+
+# # Run the app
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
