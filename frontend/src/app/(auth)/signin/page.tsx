@@ -108,7 +108,6 @@ export default function SignInPage() {
           </div>
           <button
             onClick={handleGoogleLogin}
-            disabled={loading || googleLoading}
             className="w-full cursor-pointer flex justify-center bg-white hover:bg-gray-300 transition-all duration-300 text-black mt-2 py-2 rounded-lg disabled:opacity-50"
           >
             <span>
