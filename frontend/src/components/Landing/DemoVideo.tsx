@@ -47,7 +47,7 @@ export function DemoVideoSection() {
       prompt: "Animate Bubble Sort Sorting alogrithm",
       thumbnail: "/thumbnail03.png",
       videoUrl:
-        "https://res.cloudinary.com/dbyfsythn/video/upload/v1751193630/manim_videos/manim_videos/test-frontend/21b94545.mp4",
+        "https://res.cloudinary.com/dbyfsythn/video/upload/v1753881495/manim_videos/manim_videos/c6d028fc-7c92-4ef8-9fa2-50c8b7715996/9e338565.mp4",
     },
   ];
 
