@@ -7,7 +7,7 @@ from app.middleware.middleware import auth_middleware
 
 origins = [
     "http://localhost:3000",
-    "https://your-frontend-domain.com", 
+    "https://visura.space", 
 ]
 
 @app.get("/ping", tags=["Health"])
