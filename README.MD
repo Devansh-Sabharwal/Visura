@@ -9,7 +9,9 @@ Say it. See it. Animate it. All with Visura's AI
 
 ---
 
-<img src="https://github.com/user-attachments/assets/39cb29bc-ad21-4296-8f2b-308f46c16b2c" />
+## 🎬 Demo
+
+https://github.com/user-attachments/assets/39cb29bc-ad21-4296-8f2b-308f46c16b2c
 
 ## Features
 
