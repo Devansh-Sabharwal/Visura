@@ -9,10 +9,7 @@ Say it. See it. Animate it. All with Visura's AI
 
 ---
 
-## 🎬 Demo
-
-<video src="https://res.cloudinary.com/dbyfsythn/video/upload/v1755083444/demo_weukqp.mp4" controls width="600"></video>
-
+<img src="https://github.com/user-attachments/assets/39cb29bc-ad21-4296-8f2b-308f46c16b2c" width=200 />
 ## Features
 
 - **Natural Language to Animation** — Describe your idea in plain English, and Visura generates both the **explanation** and **Manim CE code**.
