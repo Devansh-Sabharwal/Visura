@@ -9,7 +9,8 @@ Say it. See it. Animate it. All with Visura's AI
 
 ---
 
-<img src="https://github.com/user-attachments/assets/39cb29bc-ad21-4296-8f2b-308f46c16b2c" width=200 />
+<img src="https://github.com/user-attachments/assets/39cb29bc-ad21-4296-8f2b-308f46c16b2c" />
+
 ## Features
 
 - **Natural Language to Animation** — Describe your idea in plain English, and Visura generates both the **explanation** and **Manim CE code**.
