@@ -9,7 +9,9 @@ Say it. See it. Animate it. All with Visura's AI
 
 ---
 
-[🎥 Watch the Demo](frontend/public/demo.mp4)
+## 🎬 Demo
+
+<video src="https://res.cloudinary.com/dbyfsythn/video/upload/v1755083444/demo_weukqp.mp4" controls width="600"></video>
 
 ## Features
 
@@ -86,7 +88,6 @@ cd Manim-Backend
 ```
 python -m venv venv
 venv/bin/activate  # On Windows: venv\Scripts\activate
-
 ```
 
 5. Install dependencies
@@ -133,7 +134,6 @@ git clone https://github.com/Devansh-Sabharwal/visura.git
 
 ```
 cd Manim-Backend
-
 ```
 
 3. Copy environment variables from .env.example to .env and fill them
