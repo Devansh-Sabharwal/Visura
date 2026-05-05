@@ -108,7 +108,21 @@ docker run -d --name some-redis -p 6379:6379 redis
 alembic upgrade head
 ```
 
-8. Start FastAPI backend
+8. Start Celery
+
+for Windows
+
+```
+celery -A app.celery.celery worker --loglevel=info -Q video_tasks --pool=solo
+```
+
+for Linux
+
+```
+celery -A app.celery.celery worker --loglevel=info -Q video_tasks
+```
+
+9. Start FastAPI backend
 
 ```
 uvicorn app.main:app --reload
@@ -150,7 +164,7 @@ alembic upgrade head
 docker build -t "visura-backend" .
 ```
 
-6. Run Docker comose up
+6. Run Docker compose up
 
 ```
 docker compose up

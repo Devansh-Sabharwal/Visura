@@ -116,3 +116,13 @@ export const authOptions: NextAuthOptions = {
     signIn: "/signin",
   },
 };
+// secure way
+// if (account?.provider === "google") {
+//   const response = await fetch(`${FASTAPI_URL}/auth/google`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       idToken: account.id_token, // send raw Google ID token
+//     }),
+//   });
+// }

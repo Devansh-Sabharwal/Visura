@@ -66,7 +66,7 @@ async def stream_chat(body: PromptReq, req: Request, background_tasks: Backgroun
             
             try:
                 resp = client.models.generate_content_stream(
-                    model="gemini-2.5-flash-preview-05-20",
+                    model="gemini-2.5-flash",
                     config=types.GenerateContentConfig(
                         temperature=0.1,
                         max_output_tokens=20000,

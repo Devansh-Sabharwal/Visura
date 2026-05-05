@@ -111,3 +111,36 @@ def google_auth(req:GoogleUser,session:Session=Depends(get_session)):
         
     
 
+# from google.oauth2 import id_token
+# from google.auth.transport import requests
+
+# @router.post("/google")
+# def google_auth(payload: dict, session: Session = Depends(get_session)):
+#     try:
+#         # Verify token with Google
+#         id_info = id_token.verify_oauth2_token(
+#             payload["idToken"],
+#             requests.Request(),
+#             YOUR_GOOGLE_CLIENT_ID
+#         )
+
+#         # Extract verified email and user info
+#         email = id_info["email"]
+#         name = id_info.get("name", "")
+#         google_id = id_info["sub"]
+#         picture = id_info.get("picture")
+
+#         # Now safe to trust the email
+#         user = get_user_by_email(session, email)
+#         if not user:
+#             user = create_user(session, User(email=email, name=name, googleId=google_id, image=picture))
+
+#         token = create_access_token({"id": user.id})
+#         return {
+#             "token": token,
+#             "token_type": "bearer",
+#             "name": user.name,
+#             "id": user.id
+#         }
+#     except ValueError:
+#         raise HTTPException(status_code=401, detail="Invalid Google token")
